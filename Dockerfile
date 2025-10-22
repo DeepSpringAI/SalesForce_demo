@@ -68,12 +68,26 @@ async def health():
 
 # Serve static files
 if os.path.exists("static"):
-    app.mount("/static", StaticFiles(directory="static"), name="static")
+    # Mount static files at root for React build assets
+    app.mount("/static", StaticFiles(directory="static/static"), name="react-static")
+    
+    # Serve React build assets directly
+    @app.get("/js/{file_path:path}")
+    async def serve_js(file_path: str):
+        return FileResponse(f"static/static/js/{file_path}")
+    
+    @app.get("/css/{file_path:path}")
+    async def serve_css(file_path: str):
+        return FileResponse(f"static/static/css/{file_path}")
+    
+    @app.get("/media/{file_path:path}")
+    async def serve_media(file_path: str):
+        return FileResponse(f"static/static/media/{file_path}")
 
     # Serve React app for all other routes
     @app.get("/{path:path}")
     async def serve_react(path: str = ""):
-        # Check if it's a static file
+        # Check if it's a static file in the root
         static_file = f"static/{path}"
         if path and os.path.exists(static_file) and os.path.isfile(static_file):
             return FileResponse(static_file)
