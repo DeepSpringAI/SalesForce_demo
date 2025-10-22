@@ -4,8 +4,18 @@ import React, { useState, useEffect } from 'react';
 import { ChatKit, useChatKit } from '@openai/chatkit-react';
 import { SimpleChat } from './SimpleChat';
 
+// Function to generate random 5-letter lastname
+const generateRandomLastname = () => {
+  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  let lastname = '';
+  for (let i = 0; i < 5; i++) {
+    lastname += letters.charAt(Math.floor(Math.random() * letters.length));
+  }
+  return lastname;
+};
+
 export function MyChat() {
-  const { control } = useChatKit({
+  const chatkit = useChatKit({
     api: {
       async getClientSecret(existing) {
         try {
@@ -74,19 +84,24 @@ export function MyChat() {
       greeting: 'Hello! How can I help you today?',
       prompts: [
         {
-          label: 'What can you help me with?',
-          prompt: 'What can you help me with?',
+          label: 'What you can do?',
+          prompt: 'What you can do?',
           icon: 'circle-question'
         },
         {
-          label: 'Tell me about your capabilities',
-          prompt: 'Tell me about your capabilities',
+          label: 'Salesforce Data Summary',
+          prompt: 'give me a summary of data in Salesforce',
           icon: 'star-filled'
         },
         {
-          label: 'How does this work?',
-          prompt: 'How does this work?',
+          label: 'Doctors in Jeddah',
+          prompt: 'give me 5 doctors in jeddah',
           icon: 'lightbulb'
+        },
+        {
+          label: 'Create Doctor Contact',
+          prompt: `create a doctor contact name Ahmad lastname ${generateRandomLastname()}, ahmad@gmail.com, 092224222`,
+          icon: 'circle-question'
         }
       ],
     },
@@ -111,11 +126,12 @@ export function MyChat() {
         <strong>Debug Info:</strong> Check browser console for detailed logs. If you see "Something went wrong", check the Network tab for failed requests.
       </div>
       <ChatKit 
-        control={control} 
+        control={chatkit.control} 
         style={{ 
           height: '600px', 
           width: '100%',
-          border: 'none'
+          border: 'none',
+          borderRadius: '16px'
         }} 
       />
     </div>
@@ -159,164 +175,229 @@ const Chat = () => {
   }, [scriptLoaded]);
 
   return (
-    <div style={{ padding: '20px', maxWidth: '1000px', margin: '0 auto' }}>
-      <h1>ChatKit Demo</h1>
-      
-      <div style={{ 
-        marginBottom: '20px',
-        padding: '15px',
-        backgroundColor: '#d4edda',
-        borderRadius: '8px',
-        border: '1px solid #28a745'
+    <div style={{ 
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+    }}>
+      {/* Header */}
+      <div style={{
+        background: 'rgba(255, 255, 255, 0.95)',
+        backdropFilter: 'blur(10px)',
+        padding: '20px',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
+        boxShadow: '0 2px 20px rgba(0, 0, 0, 0.1)'
       }}>
-        <h3>✅ Real ChatKit Integration Active</h3>
-        <p>Using your working Python server with real OpenAI API:</p>
-        <ul>
-          <li>🔑 Direct OpenAI ChatKit API calls</li>
-          <li>✅ Real session creation with client_secret</li>
-          <li>🌐 Python FastAPI server on port 8000</li>
-          <li>🔐 Domain key handled by backend for ngrok compatibility</li>
-          <li>🚀 Simple Chat available as fallback</li>
-        </ul>
-        <p><strong>Status:</strong> Session creation with domain verification should work on ngrok!</p>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '15px' }}>
+          <div style={{
+            width: '50px',
+            height: '50px',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            borderRadius: '12px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '24px',
+            color: 'white',
+            fontWeight: 'bold'
+          }}>
+            Rx
+          </div>
+          <div>
+            <h1 style={{ 
+              margin: 0, 
+              fontSize: '28px', 
+              fontWeight: '700',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
+            }}>
+              PharmaAI Salesforce Assistant
+            </h1>
+            <p style={{ 
+              margin: '5px 0 0 0', 
+              color: '#666', 
+              fontSize: '16px',
+              fontWeight: '400'
+            }}>
+              Intelligent pharmaceutical sales support powered by AI
+            </p>
+          </div>
+        </div>
       </div>
 
-      {/* Script Loading Status */}
-      {!scriptLoaded && !scriptError && (
-        <div style={{ 
-          marginBottom: '20px',
-          padding: '15px',
-          backgroundColor: '#fff3cd',
-          borderRadius: '8px',
-          border: '1px solid #ffeaa7'
-        }}>
-          <h4>⏳ Loading ChatKit...</h4>
-          <p>Waiting for ChatKit script to load from CDN...</p>
-        </div>
-      )}
+      {/* Main Content */}
+      <div style={{ 
+        maxWidth: '1200px', 
+        margin: '0 auto', 
+        padding: '40px 20px'
+      }}>
+        {/* Status indicator - simplified */}
+        {scriptLoaded && (
+          <div style={{ 
+            marginBottom: '30px',
+            padding: '15px 20px',
+            background: 'rgba(255, 255, 255, 0.9)',
+            borderRadius: '12px',
+            border: '1px solid rgba(40, 167, 69, 0.3)',
+            boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px'
+          }}>
+            <div style={{
+              width: '12px',
+              height: '12px',
+              backgroundColor: '#28a745',
+              borderRadius: '50%',
+              animation: 'pulse 2s infinite'
+            }}></div>
+            <span style={{ color: '#28a745', fontWeight: '600', fontSize: '14px' }}>
+              AI Assistant Ready
+            </span>
+          </div>
+        )}
 
-      {scriptError && (
-        <div style={{ 
-          marginBottom: '20px',
-          padding: '15px',
-          backgroundColor: '#f8d7da',
-          borderRadius: '8px',
-          border: '1px solid #dc3545'
-        }}>
-          <h4>❌ ChatKit Not Available</h4>
-          <p>ChatKit couldn't be loaded. This could be due to:</p>
-          <ul>
-            <li>Network connectivity issues</li>
-            <li>CDN being unavailable</li>
-            <li>ChatKit not enabled for your account</li>
-            <li>Browser blocking the script</li>
-          </ul>
-          <div style={{ marginTop: '15px' }}>
+        {/* Loading State */}
+        {!scriptLoaded && !scriptError && (
+          <div style={{ 
+            marginBottom: '30px',
+            padding: '20px',
+            background: 'rgba(255, 255, 255, 0.9)',
+            borderRadius: '12px',
+            boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
+            textAlign: 'center'
+          }}>
+            <div style={{
+              width: '40px',
+              height: '40px',
+              border: '4px solid #f3f3f3',
+              borderTop: '4px solid #667eea',
+              borderRadius: '50%',
+              animation: 'spin 1s linear infinite',
+              margin: '0 auto 15px'
+            }}></div>
+            <h4 style={{ margin: '0 0 10px 0', color: '#333' }}>Initializing AI Assistant...</h4>
+            <p style={{ margin: 0, color: '#666', fontSize: '14px' }}>Please wait while we connect to the AI service</p>
+          </div>
+        )}
+
+        {/* Error State */}
+        {scriptError && (
+          <div style={{ 
+            marginBottom: '30px',
+            padding: '20px',
+            background: 'rgba(255, 255, 255, 0.9)',
+            borderRadius: '12px',
+            boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
+            textAlign: 'center'
+          }}>
+            <div style={{ fontSize: '48px', marginBottom: '15px' }}>⚠️</div>
+            <h4 style={{ margin: '0 0 10px 0', color: '#dc3545' }}>AI Service Unavailable</h4>
+            <p style={{ margin: '0 0 20px 0', color: '#666', fontSize: '14px' }}>
+              Unable to connect to the AI service. You can still use our backup chat system.
+            </p>
             <button
               onClick={() => setShowSimpleChat(true)}
               style={{
-                padding: '10px 20px',
-                backgroundColor: '#28a745',
+                padding: '12px 24px',
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                 color: 'white',
                 border: 'none',
-                borderRadius: '4px',
+                borderRadius: '8px',
                 cursor: 'pointer',
-                fontWeight: 'bold'
+                fontWeight: '600',
+                fontSize: '14px',
+                boxShadow: '0 2px 10px rgba(102, 126, 234, 0.3)'
               }}
             >
-              🚀 Use Simple Chat Instead
+              Continue with Backup Chat
             </button>
           </div>
-        </div>
-      )}
-
-      {/* Chat Interface */}
-      <div style={{ 
-        border: '1px solid #ddd', 
-        borderRadius: '8px',
-        overflow: 'hidden',
-        backgroundColor: '#fff'
-      }}>
-        {showSimpleChat ? (
-          <SimpleChat />
-        ) : scriptLoaded ? (
-          <MyChat />
-        ) : (
-          <div style={{ 
-            height: '600px', 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center',
-            color: '#666',
-            flexDirection: 'column',
-            gap: '20px'
-          }}>
-            {scriptError ? (
-              <div style={{ textAlign: 'center' }}>
-                <p>❌ ChatKit unavailable</p>
-                <button
-                  onClick={() => setShowSimpleChat(true)}
-                  style={{
-                    padding: '10px 20px',
-                    backgroundColor: '#007bff',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    fontWeight: 'bold'
-                  }}
-                >
-                  Try Simple Chat
-                </button>
-              </div>
-            ) : (
-              <div style={{ textAlign: 'center' }}>
-                <p>⏳ Loading ChatKit...</p>
-                <p>Please wait while the script loads</p>
-                <button
-                  onClick={() => setShowSimpleChat(true)}
-                  style={{
-                    padding: '8px 16px',
-                    backgroundColor: '#6c757d',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    fontSize: '12px'
-                  }}
-                >
-                  Skip to Simple Chat
-                </button>
-              </div>
-            )}
-          </div>
         )}
-      </div>
 
-      <div style={{ 
-        marginTop: '20px', 
-        padding: '15px',
-        backgroundColor: '#f8f9fa',
-        borderRadius: '4px',
-        fontSize: '14px',
-        border: '1px solid #e9ecef'
-      }}>
-        <h4>🔍 Debugging "Something went wrong" Error:</h4>
-        <ol>
-          <li><strong>Open Browser Console:</strong> Press F12 and check for error messages</li>
-          <li><strong>Check Network Tab:</strong> Look for failed requests to <code>/api/chatkit/session</code></li>
-          <li><strong>Script Loading:</strong> Verify ChatKit script loads from CDN</li>
-          <li><strong>Session Creation:</strong> Check if mock API endpoint responds correctly</li>
-        </ol>
-        
-        <div style={{ marginTop: '15px', padding: '10px', backgroundColor: '#fff3cd', borderRadius: '4px' }}>
-          <strong>💡 Setup Required:</strong>
-          <ul style={{ margin: '5px 0', paddingLeft: '20px' }}>
-            <li>Set <code>OPENAI_API_KEY</code> environment variable</li>
-            <li>Ensure your OpenAI account has ChatKit access</li>
-            <li>Add your domain to OpenAI's allowlist</li>
-            <li>Restart the development server after adding env vars</li>
-          </ul>
+        {/* Chat Interface */}
+        <div style={{ 
+          background: 'rgba(255, 255, 255, 0.95)',
+          borderRadius: '16px',
+          overflow: 'hidden',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+          backdropFilter: 'blur(10px)',
+          border: '1px solid rgba(255, 255, 255, 0.2)'
+        }}>
+          {showSimpleChat ? (
+            <SimpleChat />
+          ) : scriptLoaded ? (
+            <MyChat />
+          ) : (
+            <div style={{ 
+              height: '600px', 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center',
+              color: '#666',
+              flexDirection: 'column',
+              gap: '20px'
+            }}>
+              {scriptError ? (
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '48px', marginBottom: '15px' }}>🤖</div>
+                  <p style={{ margin: '0 0 20px 0', fontSize: '16px', color: '#666' }}>
+                    AI Assistant is initializing...
+                  </p>
+                  <button
+                    onClick={() => setShowSimpleChat(true)}
+                    style={{
+                      padding: '12px 24px',
+                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      fontWeight: '600',
+                      fontSize: '14px'
+                    }}
+                  >
+                    Start Conversation
+                  </button>
+                </div>
+              ) : (
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{
+                    width: '60px',
+                    height: '60px',
+                    border: '4px solid #f3f3f3',
+                    borderTop: '4px solid #667eea',
+                    borderRadius: '50%',
+                    animation: 'spin 1s linear infinite',
+                    margin: '0 auto 20px'
+                  }}></div>
+                  <p style={{ margin: '0 0 10px 0', fontSize: '16px', color: '#333' }}>
+                    Connecting to AI Assistant...
+                  </p>
+                  <p style={{ margin: '0 0 20px 0', fontSize: '14px', color: '#666' }}>
+                    This may take a few moments
+                  </p>
+                  <button
+                    onClick={() => setShowSimpleChat(true)}
+                    style={{
+                      padding: '8px 16px',
+                      backgroundColor: 'transparent',
+                      color: '#667eea',
+                      border: '1px solid #667eea',
+                      borderRadius: '6px',
+                      cursor: 'pointer',
+                      fontSize: '12px',
+                      fontWeight: '500'
+                    }}
+                  >
+                    Use Backup Chat
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -73,14 +73,14 @@ export function SimpleChat() {
     }}>
       {/* Header */}
       <div style={{ 
-        padding: '15px', 
-        borderBottom: '1px solid #eee',
-        backgroundColor: '#f8f9fa',
-        borderRadius: '8px 8px 0 0'
+        padding: '20px', 
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        color: 'white',
+        borderRadius: '16px 16px 0 0'
       }}>
-        <h3 style={{ margin: 0, color: '#333' }}>💬 Simple Chat Interface</h3>
-        <p style={{ margin: '5px 0 0 0', fontSize: '14px', color: '#666' }}>
-          ChatKit fallback - fully functional chat UI
+        <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '600' }}>🤖 PharmaAI Assistant</h3>
+        <p style={{ margin: '5px 0 0 0', fontSize: '14px', opacity: 0.9 }}>
+          Backup Chat Mode - Ready to assist with pharmaceutical inquiries
         </p>
       </div>
 
