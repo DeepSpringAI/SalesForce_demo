@@ -34,8 +34,8 @@ COPY server.py .
 # Copy built React app
 COPY --from=react-builder /app/build ./static
 
-# Create combined server
-RUN cat > combined_server.py << 'EOF'
+# Create combined server file
+COPY <<EOF /app/combined_server.py
 import os
 from fastapi import FastAPI, Request
 from fastapi.responses import FileResponse
