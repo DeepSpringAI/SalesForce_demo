@@ -1,0 +1,315 @@
+{
+  "version": "1.0",
+  "name": "Doctors list",
+  "template": "{\"type\":\"ListView\",\"status\":{\"text\":{{ (title) | tojson }},\"icon\":\"profile-card\"},\"children\":[{%- set _c -%}{%-for item in doctors -%},{\"type\":\"ListViewItem\",\"key\":{{ (item.id) | tojson }},\"gap\":3,\"onClickAction\":{\"type\":\"doctor.select\",\"payload\":{\"id\":{{ (item.id) | tojson }}}},\"children\":[{\"type\":\"Box\",\"background\":{{ (item.accent) | tojson }},\"radius\":\"sm\",\"padding\":2,\"children\":[{\"type\":\"Icon\",\"name\":{{ (item.icon) | tojson }},\"size\":\"lg\",\"color\":\"white\",\"children\":[]}]},{\"type\":\"Col\",\"gap\":0,\"children\":[{\"type\":\"Text\",\"value\":{{ (item.name) | tojson }},\"size\":\"sm\",\"weight\":\"semibold\",\"children\":[]},{\"type\":\"Caption\",\"value\":{{ ((item.email ~ \" • \" ~ item.city)) | tojson }},\"color\":\"secondary\",\"children\":[]}]},{\"type\":\"Spacer\",\"children\":[]},{\"type\":\"Button\",\"iconStart\":\"mail\",\"variant\":\"outline\",\"onClickAction\":{\"type\":\"doctor.email\",\"payload\":{\"email\":{{ (item.email) | tojson }}}},\"children\":[]}]}{%-endfor-%}{%- endset -%}{{- (_c[1:] if _c and _c[0] == ',' else _c) -}}]}",
+  "jsonSchema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "widget",
+    "type": "object",
+    "properties": {
+      "title": {
+        "type": "string"
+      },
+      "doctors": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "accent": {
+              "type": "string"
+            },
+            "icon": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "email",
+            "city",
+            "accent",
+            "icon"
+          ],
+          "additionalProperties": false
+        },
+        "minItems": 4
+      },
+      "meta": {
+        "type": "object",
+        "properties": {
+          "spec": {
+            "type": "string"
+          },
+          "complexity": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "spec",
+          "complexity"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "title",
+      "doctors",
+      "meta"
+    ],
+    "additionalProperties": false
+  },
+  "outputJsonPreview": {
+    "type": "ListView",
+    "status": {
+      "text": "Doctors",
+      "icon": "profile-card"
+    },
+    "children": [
+      {
+        "type": "ListViewItem",
+        "key": "d1",
+        "gap": 3,
+        "onClickAction": {
+          "type": "doctor.select",
+          "payload": {
+            "id": "d1"
+          }
+        },
+        "children": [
+          {
+            "type": "Box",
+            "background": "blue-500",
+            "radius": "sm",
+            "padding": 2,
+            "children": [
+              {
+                "type": "Icon",
+                "name": "profile-card",
+                "size": "lg",
+                "color": "white"
+              }
+            ]
+          },
+          {
+            "type": "Col",
+            "gap": 0,
+            "children": [
+              {
+                "type": "Text",
+                "value": "Dr. Maya Patel",
+                "size": "sm",
+                "weight": "semibold"
+              },
+              {
+                "type": "Caption",
+                "value": "maya.patel@health.org • San Francisco, CA",
+                "color": "secondary"
+              }
+            ]
+          },
+          {
+            "type": "Spacer"
+          },
+          {
+            "type": "Button",
+            "iconStart": "mail",
+            "variant": "outline",
+            "onClickAction": {
+              "type": "doctor.email",
+              "payload": {
+                "email": "maya.patel@health.org"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "ListViewItem",
+        "key": "d2",
+        "gap": 3,
+        "onClickAction": {
+          "type": "doctor.select",
+          "payload": {
+            "id": "d2"
+          }
+        },
+        "children": [
+          {
+            "type": "Box",
+            "background": "purple-500",
+            "radius": "sm",
+            "padding": 2,
+            "children": [
+              {
+                "type": "Icon",
+                "name": "user",
+                "size": "lg",
+                "color": "white"
+              }
+            ]
+          },
+          {
+            "type": "Col",
+            "gap": 0,
+            "children": [
+              {
+                "type": "Text",
+                "value": "Dr. Ethan Ross",
+                "size": "sm",
+                "weight": "semibold"
+              },
+              {
+                "type": "Caption",
+                "value": "ethan.ross@medcenter.com • New York, NY",
+                "color": "secondary"
+              }
+            ]
+          },
+          {
+            "type": "Spacer"
+          },
+          {
+            "type": "Button",
+            "iconStart": "mail",
+            "variant": "outline",
+            "onClickAction": {
+              "type": "doctor.email",
+              "payload": {
+                "email": "ethan.ross@medcenter.com"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "ListViewItem",
+        "key": "d3",
+        "gap": 3,
+        "onClickAction": {
+          "type": "doctor.select",
+          "payload": {
+            "id": "d3"
+          }
+        },
+        "children": [
+          {
+            "type": "Box",
+            "background": "green-500",
+            "radius": "sm",
+            "padding": 2,
+            "children": [
+              {
+                "type": "Icon",
+                "name": "profile",
+                "size": "lg",
+                "color": "white"
+              }
+            ]
+          },
+          {
+            "type": "Col",
+            "gap": 0,
+            "children": [
+              {
+                "type": "Text",
+                "value": "Dr. Linh Nguyen",
+                "size": "sm",
+                "weight": "semibold"
+              },
+              {
+                "type": "Caption",
+                "value": "linh.nguyen@careclinic.net • Austin, TX",
+                "color": "secondary"
+              }
+            ]
+          },
+          {
+            "type": "Spacer"
+          },
+          {
+            "type": "Button",
+            "iconStart": "mail",
+            "variant": "outline",
+            "onClickAction": {
+              "type": "doctor.email",
+              "payload": {
+                "email": "linh.nguyen@careclinic.net"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "ListViewItem",
+        "key": "d4",
+        "gap": 3,
+        "onClickAction": {
+          "type": "doctor.select",
+          "payload": {
+            "id": "d4"
+          }
+        },
+        "children": [
+          {
+            "type": "Box",
+            "background": "orange-500",
+            "radius": "sm",
+            "padding": 2,
+            "children": [
+              {
+                "type": "Icon",
+                "name": "profile-card",
+                "size": "lg",
+                "color": "white"
+              }
+            ]
+          },
+          {
+            "type": "Col",
+            "gap": 0,
+            "children": [
+              {
+                "type": "Text",
+                "value": "Dr. Sofia García",
+                "size": "sm",
+                "weight": "semibold"
+              },
+              {
+                "type": "Caption",
+                "value": "sofia.garcia@wellness.org • Chicago, IL",
+                "color": "secondary"
+              }
+            ]
+          },
+          {
+            "type": "Spacer"
+          },
+          {
+            "type": "Button",
+            "iconStart": "mail",
+            "variant": "outline",
+            "onClickAction": {
+              "type": "doctor.email",
+              "payload": {
+                "email": "sofia.garcia@wellness.org"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "encodedWidget": "eyJpZCI6IjkxNzg2YTE1LWEyMjctNDQxYy04MDQwLTNhNzc5NTkxMTE5NyIsIm5hbWUiOiJEb2N0b3JzIGxpc3QiLCJ2aWV3IjoiPExpc3RWaWV3IHN0YXR1cz17eyB0ZXh0OiB0aXRsZSwgaWNvbjogXCJwcm9maWxlLWNhcmRcIiB9fT5cbiAge2RvY3RvcnMubWFwKChpdGVtKSA9PiAoXG4gICAgPExpc3RWaWV3SXRlbVxuICAgICAga2V5PXtpdGVtLmlkfVxuICAgICAgZ2FwPXszfVxuICAgICAgb25DbGlja0FjdGlvbj17eyB0eXBlOiBcImRvY3Rvci5zZWxlY3RcIiwgcGF5bG9hZDogeyBpZDogaXRlbS5pZCB9IH19XG4gICAgPlxuICAgICAgPEJveCBiYWNrZ3JvdW5kPXtpdGVtLmFjY2VudH0gcmFkaXVzPVwic21cIiBwYWRkaW5nPXsyfT5cbiAgICAgICAgPEljb24gbmFtZT17aXRlbS5pY29ufSBzaXplPVwibGdcIiBjb2xvcj1cIndoaXRlXCIgLz5cbiAgICAgIDwvQm94PlxuXG4gICAgICA8Q29sIGdhcD17MH0-XG4gICAgICAgIDxUZXh0IHZhbHVlPXtpdGVtLm5hbWV9IHNpemU9XCJzbVwiIHdlaWdodD1cInNlbWlib2xkXCIgLz5cbiAgICAgICAgPENhcHRpb24gdmFsdWU9e2Ake2l0ZW0uZW1haWx9IOKAoiAke2l0ZW0uY2l0eX1gfSBjb2xvcj1cInNlY29uZGFyeVwiIC8-XG4gICAgICA8L0NvbD5cblxuICAgICAgPFNwYWNlciAvPlxuICAgICAgPEJ1dHRvblxuICAgICAgICBpY29uU3RhcnQ9XCJtYWlsXCJcbiAgICAgICAgdmFyaWFudD1cIm91dGxpbmVcIlxuICAgICAgICBvbkNsaWNrQWN0aW9uPXt7IHR5cGU6IFwiZG9jdG9yLmVtYWlsXCIsIHBheWxvYWQ6IHsgZW1haWw6IGl0ZW0uZW1haWwgfSB9fVxuICAgICAgLz5cbiAgICA8L0xpc3RWaWV3SXRlbT5cbiAgKSl9XG48L0xpc3RWaWV3PiIsImRlZmF1bHRTdGF0ZSI6eyJ0aXRsZSI6IkRvY3RvcnMiLCJkb2N0b3JzIjpbeyJpZCI6ImQxIiwibmFtZSI6IkRyLiBNYXlhIFBhdGVsIiwiZW1haWwiOiJtYXlhLnBhdGVsQGhlYWx0aC5vcmciLCJjaXR5IjoiU2FuIEZyYW5jaXNjbywgQ0EiLCJhY2NlbnQiOiJibHVlLTUwMCIsImljb24iOiJwcm9maWxlLWNhcmQifSx7ImlkIjoiZDIiLCJuYW1lIjoiRHIuIEV0aGFuIFJvc3MiLCJlbWFpbCI6ImV0aGFuLnJvc3NAbWVkY2VudGVyLmNvbSIsImNpdHkiOiJOZXcgWW9yaywgTlkiLCJhY2NlbnQiOiJwdXJwbGUtNTAwIiwiaWNvbiI6InVzZXIifSx7ImlkIjoiZDMiLCJuYW1lIjoiRHIuIExpbmggTmd1eWVuIiwiZW1haWwiOiJsaW5oLm5ndXllbkBjYXJlY2xpbmljLm5ldCIsImNpdHkiOiJBdXN0aW4sIFRYIiwiYWNjZW50IjoiZ3JlZW4tNTAwIiwiaWNvbiI6InByb2ZpbGUifSx7ImlkIjoiZDQiLCJuYW1lIjoiRHIuIFNvZmlhIEdhcmPDrWEiLCJlbWFpbCI6InNvZmlhLmdhcmNpYUB3ZWxsbmVzcy5vcmciLCJjaXR5IjoiQ2hpY2FnbywgSUwiLCJhY2NlbnQiOiJvcmFuZ2UtNTAwIiwiaWNvbiI6InByb2ZpbGUtY2FyZCJ9XSwibWV0YSI6eyJzcGVjIjoiQ29tcGFjdCBkb2N0b3IgZGlyZWN0b3J5IHdpdGggbmFtZSwgZW1haWwsIGNpdHkgYW5kIGEgZnJpZW5kbHkgaWNvbi4gU2luZ2xlIHRhcCBzZWxlY3RzIGEgZG9jdG9yOyBtYWlsIGJ1dHRvbiBzdGFydHMgY29udGFjdC4iLCJjb21wbGV4aXR5IjoiTWluaW1hbDogNCBmaWVsZHMsIDEgbGlzdCwgMSBwZXItaXRlbSBhY3Rpb24uIn19LCJzdGF0ZXMiOltdfQ"
+}

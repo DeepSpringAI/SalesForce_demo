@@ -1,0 +1,210 @@
+{
+  "version": "1.0",
+  "name": "doctor_list_google_search",
+  "template": "{\"type\":\"ListView\",\"status\":{\"text\":{{ (title) | tojson }},\"icon\":\"profile-card\"},\"children\":[{%- set _c -%}{%-for item in doctors -%},{\"type\":\"ListViewItem\",\"key\":{{ (item.id) | tojson }},\"gap\":3,\"onClickAction\":{\"type\":\"doctor.select\",\"payload\":{\"id\":{{ (item.id) | tojson }}}},\"children\":[{\"type\":\"Col\",\"gap\":0,\"children\":[{\"type\":\"Text\",\"value\":{{ (item.name) | tojson }},\"size\":\"sm\",\"weight\":\"semibold\",\"children\":[]},{\"type\":\"Caption\",\"value\":{{ ((item.email ~ \" • \" ~ item.city)) | tojson }},\"color\":\"secondary\",\"children\":[]}]},{\"type\":\"Spacer\",\"children\":[]},{\"type\":\"Row\",\"gap\":2,\"align\":\"center\",\"children\":[{\"type\":\"Icon\",\"name\":\"search\",\"size\":\"md\",\"children\":[]},{\"type\":\"Markdown\",\"value\":{{ ((\"[salesforce.search](\" ~ item.googleUrl ~ \")\")) | tojson }},\"children\":[]}]}]}{%-endfor-%}{%- endset -%}{{- (_c[1:] if _c and _c[0] == ',' else _c) -}}]}",
+  "jsonSchema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "widget",
+    "type": "object",
+    "properties": {
+      "title": {
+        "type": "string"
+      },
+      "doctors": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "googleUrl": {
+              "type": "string",
+              "format": "uri"
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "email",
+            "city",
+            "googleUrl"
+          ],
+          "additionalProperties": false
+        },
+        "minItems": 3
+      }
+    },
+    "required": [
+      "title",
+      "doctors"
+    ],
+    "additionalProperties": false
+  },
+  "outputJsonPreview": {
+    "type": "ListView",
+    "status": {
+      "text": "Doctors",
+      "icon": "profile-card"
+    },
+    "children": [
+      {
+        "type": "ListViewItem",
+        "key": "1",
+        "gap": 3,
+        "onClickAction": {
+          "type": "doctor.select",
+          "payload": {
+            "id": "1"
+          }
+        },
+        "children": [
+          {
+            "type": "Col",
+            "gap": 0,
+            "children": [
+              {
+                "type": "Text",
+                "value": "Dr. Jane Smith",
+                "size": "sm",
+                "weight": "semibold"
+              },
+              {
+                "type": "Caption",
+                "value": "jane.smith@example.com • San Francisco, CA",
+                "color": "secondary"
+              }
+            ]
+          },
+          {
+            "type": "Spacer"
+          },
+          {
+            "type": "Row",
+            "gap": 2,
+            "align": "center",
+            "children": [
+              {
+                "type": "Icon",
+                "name": "search",
+                "size": "md"
+              },
+              {
+                "type": "Markdown",
+                "value": "[salesforce.search](https://www.google.com/search?q=Dr.+Jane+Smith+jane.smith%40example.com)"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "ListViewItem",
+        "key": "2",
+        "gap": 3,
+        "onClickAction": {
+          "type": "doctor.select",
+          "payload": {
+            "id": "2"
+          }
+        },
+        "children": [
+          {
+            "type": "Col",
+            "gap": 0,
+            "children": [
+              {
+                "type": "Text",
+                "value": "Dr. Omar Rahman",
+                "size": "sm",
+                "weight": "semibold"
+              },
+              {
+                "type": "Caption",
+                "value": "o.rahman@health.org • New York, NY",
+                "color": "secondary"
+              }
+            ]
+          },
+          {
+            "type": "Spacer"
+          },
+          {
+            "type": "Row",
+            "gap": 2,
+            "align": "center",
+            "children": [
+              {
+                "type": "Icon",
+                "name": "search",
+                "size": "md"
+              },
+              {
+                "type": "Markdown",
+                "value": "[salesforce.search](https://www.google.com/search?q=Dr.+Omar+Rahman+o.rahman%40health.org)"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "ListViewItem",
+        "key": "3",
+        "gap": 3,
+        "onClickAction": {
+          "type": "doctor.select",
+          "payload": {
+            "id": "3"
+          }
+        },
+        "children": [
+          {
+            "type": "Col",
+            "gap": 0,
+            "children": [
+              {
+                "type": "Text",
+                "value": "Dr. Mei Chen",
+                "size": "sm",
+                "weight": "semibold"
+              },
+              {
+                "type": "Caption",
+                "value": "mei.chen@cliniccare.com • Seattle, WA",
+                "color": "secondary"
+              }
+            ]
+          },
+          {
+            "type": "Spacer"
+          },
+          {
+            "type": "Row",
+            "gap": 2,
+            "align": "center",
+            "children": [
+              {
+                "type": "Icon",
+                "name": "search",
+                "size": "md"
+              },
+              {
+                "type": "Markdown",
+                "value": "[salesforce.search](https://www.google.com/search?q=Dr.+Mei+Chen+mei.chen%40cliniccare.com)"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "encodedWidget": "eyJpZCI6IjA1ZDc3NDFlLTQxZDItNDA0Mi04YzAzLTU4NzYzNzJlNWY3NSIsIm5hbWUiOiJkb2N0b3JfbGlzdF9nb29nbGVfc2VhcmNoIiwidmlldyI6IjxMaXN0VmlldyBzdGF0dXM9e3sgdGV4dDogdGl0bGUsIGljb246IFwicHJvZmlsZS1jYXJkXCIgfX0-XG4gIHtkb2N0b3JzLm1hcCgoaXRlbSkgPT4gKFxuICAgIDxMaXN0Vmlld0l0ZW1cbiAgICAgIGtleT17aXRlbS5pZH1cbiAgICAgIGdhcD17M31cbiAgICAgIG9uQ2xpY2tBY3Rpb249e3sgdHlwZTogXCJkb2N0b3Iuc2VsZWN0XCIsIHBheWxvYWQ6IHsgaWQ6IGl0ZW0uaWQgfSB9fVxuICAgID5cbiAgICAgIDxDb2wgZ2FwPXswfT5cbiAgICAgICAgPFRleHQgdmFsdWU9e2l0ZW0ubmFtZX0gc2l6ZT1cInNtXCIgd2VpZ2h0PVwic2VtaWJvbGRcIiAvPlxuICAgICAgICA8Q2FwdGlvbiB2YWx1ZT17YCR7aXRlbS5lbWFpbH0g4oCiICR7aXRlbS5jaXR5fWB9IGNvbG9yPVwic2Vjb25kYXJ5XCIgLz5cbiAgICAgIDwvQ29sPlxuXG4gICAgICA8U3BhY2VyIC8-XG4gICAgICBcbiAgICAgIDxSb3cgZ2FwPXsyfSBhbGlnbj1cImNlbnRlclwiPlxuICAgICAgICA8SWNvbiBuYW1lPVwic2VhcmNoXCIgc2l6ZT1cIm1kXCIgLz5cbiAgICAgICAgPE1hcmtkb3duIHZhbHVlPXtgW3NhbGVzZm9yY2Uuc2VhcmNoXSgke2l0ZW0uZ29vZ2xlVXJsfSlgfSAvPlxuICAgICAgPC9Sb3c-XG5cbiAgICA8L0xpc3RWaWV3SXRlbT5cbiAgKSl9XG48L0xpc3RWaWV3PiIsImRlZmF1bHRTdGF0ZSI6eyJ0aXRsZSI6IkRvY3RvcnMiLCJkb2N0b3JzIjpbeyJpZCI6IjEiLCJuYW1lIjoiRHIuIEphbmUgU21pdGgiLCJlbWFpbCI6ImphbmUuc21pdGhAZXhhbXBsZS5jb20iLCJjaXR5IjoiU2FuIEZyYW5jaXNjbywgQ0EiLCJnb29nbGVVcmwiOiJodHRwczovL3d3dy5nb29nbGUuY29tL3NlYXJjaD9xPURyLitKYW5lK1NtaXRoK2phbmUuc21pdGglNDBleGFtcGxlLmNvbSJ9LHsiaWQiOiIyIiwibmFtZSI6IkRyLiBPbWFyIFJhaG1hbiIsImVtYWlsIjoiby5yYWhtYW5AaGVhbHRoLm9yZyIsImNpdHkiOiJOZXcgWW9yaywgTlkiLCJnb29nbGVVcmwiOiJodHRwczovL3d3dy5nb29nbGUuY29tL3NlYXJjaD9xPURyLitPbWFyK1JhaG1hbitvLnJhaG1hbiU0MGhlYWx0aC5vcmcifSx7ImlkIjoiMyIsIm5hbWUiOiJEci4gTWVpIENoZW4iLCJlbWFpbCI6Im1laS5jaGVuQGNsaW5pY2NhcmUuY29tIiwiY2l0eSI6IlNlYXR0bGUsIFdBIiwiZ29vZ2xlVXJsIjoiaHR0cHM6Ly93d3cuZ29vZ2xlLmNvbS9zZWFyY2g_cT1Eci4rTWVpK0NoZW4rbWVpLmNoZW4lNDBjbGluaWNjYXJlLmNvbSJ9XX0sInN0YXRlcyI6W119"
+}

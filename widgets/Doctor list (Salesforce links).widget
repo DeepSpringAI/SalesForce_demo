@@ -1,0 +1,157 @@
+{
+  "version": "1.0",
+  "name": "Doctor list (Salesforce links)",
+  "template": "{\"type\":\"ListView\",\"children\":[{%- set _c -%}{%-for item in doctors -%},{\"type\":\"ListViewItem\",\"key\":{{ (item.id) | tojson }},\"gap\":3,\"onClickAction\":{\"type\":\"open.url\",\"payload\":{\"url\":{{ (item.salesforceUrl) | tojson }}},\"handler\":\"client\"},\"children\":[{\"type\":\"Box\",\"background\":\"alpha-10\",\"radius\":\"sm\",\"padding\":2,\"children\":[{\"type\":\"Icon\",\"name\":\"profile-card\",\"size\":\"lg\",\"children\":[]}]},{\"type\":\"Col\",\"gap\":0,\"children\":[{\"type\":\"Text\",\"value\":{{ (item.name) | tojson }},\"size\":\"sm\",\"weight\":\"semibold\",\"children\":[]},{\"type\":\"Caption\",\"value\":{{ ((item.email ~ \" • \" ~ item.phone)) | tojson }},\"color\":\"secondary\",\"children\":[]}]},{\"type\":\"Spacer\",\"children\":[]},{\"type\":\"Markdown\",\"value\":{{ ((\"[Open Profile](\" ~ item.salesforceUrl ~ \")\")) | tojson }},\"children\":[]}]}{%-endfor-%}{%- endset -%}{{- (_c[1:] if _c and _c[0] == ',' else _c) -}}]}",
+  "jsonSchema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "widget",
+    "type": "object",
+    "properties": {
+      "doctors": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "phone": {
+              "type": "string"
+            },
+            "salesforceUrl": {
+              "type": "string",
+              "format": "uri"
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "email",
+            "phone",
+            "salesforceUrl"
+          ],
+          "additionalProperties": false
+        },
+        "minItems": 2
+      }
+    },
+    "required": [
+      "doctors"
+    ],
+    "additionalProperties": false
+  },
+  "outputJsonPreview": {
+    "type": "ListView",
+    "children": [
+      {
+        "type": "ListViewItem",
+        "key": "1",
+        "gap": 3,
+        "onClickAction": {
+          "type": "open.url",
+          "payload": {
+            "url": "https://yourdomain.my.salesforce.com/lightning/r/Contact/003XXXXXXXXXXXXXXX/view"
+          },
+          "handler": "client"
+        },
+        "children": [
+          {
+            "type": "Box",
+            "background": "alpha-10",
+            "radius": "sm",
+            "padding": 2,
+            "children": [
+              {
+                "type": "Icon",
+                "name": "profile-card",
+                "size": "lg"
+              }
+            ]
+          },
+          {
+            "type": "Col",
+            "gap": 0,
+            "children": [
+              {
+                "type": "Text",
+                "value": "Dr. Jane Smith, MD",
+                "size": "sm",
+                "weight": "semibold"
+              },
+              {
+                "type": "Caption",
+                "value": "jane.smith@exampleclinic.com • (415) 555-0131",
+                "color": "secondary"
+              }
+            ]
+          },
+          {
+            "type": "Spacer"
+          },
+          {
+            "type": "Markdown",
+            "value": "[Open Profile](https://yourdomain.my.salesforce.com/lightning/r/Contact/003XXXXXXXXXXXXXXX/view)"
+          }
+        ]
+      },
+      {
+        "type": "ListViewItem",
+        "key": "2",
+        "gap": 3,
+        "onClickAction": {
+          "type": "open.url",
+          "payload": {
+            "url": "https://yourdomain.my.salesforce.com/lightning/r/Contact/003YYYYYYYYYYYYYYY/view"
+          },
+          "handler": "client"
+        },
+        "children": [
+          {
+            "type": "Box",
+            "background": "alpha-10",
+            "radius": "sm",
+            "padding": 2,
+            "children": [
+              {
+                "type": "Icon",
+                "name": "profile-card",
+                "size": "lg"
+              }
+            ]
+          },
+          {
+            "type": "Col",
+            "gap": 0,
+            "children": [
+              {
+                "type": "Text",
+                "value": "Dr. Rafael Gomez, DO",
+                "size": "sm",
+                "weight": "semibold"
+              },
+              {
+                "type": "Caption",
+                "value": "rgomez@northshorehealth.org • (312) 555-0088",
+                "color": "secondary"
+              }
+            ]
+          },
+          {
+            "type": "Spacer"
+          },
+          {
+            "type": "Markdown",
+            "value": "[Open Profile](https://yourdomain.my.salesforce.com/lightning/r/Contact/003YYYYYYYYYYYYYYY/view)"
+          }
+        ]
+      }
+    ]
+  },
+  "encodedWidget": "eyJpZCI6ImYwNDkwNzViLTM1ZGYtNGNjYy1hM2NiLTcyNjhhOTljNmMzMSIsIm5hbWUiOiJEb2N0b3IgbGlzdCAoU2FsZXNmb3JjZSBsaW5rcykiLCJ2aWV3IjoiPExpc3RWaWV3PlxuICB7ZG9jdG9ycy5tYXAoKGl0ZW0pID0-IChcbiAgICA8TGlzdFZpZXdJdGVtXG4gICAgICBrZXk9e2l0ZW0uaWR9XG4gICAgICBnYXA9ezN9XG4gICAgICBvbkNsaWNrQWN0aW9uPXt7IHR5cGU6IFwib3Blbi51cmxcIiwgcGF5bG9hZDogeyB1cmw6IGl0ZW0uc2FsZXNmb3JjZVVybCB9LCBoYW5kbGVyOiBcImNsaWVudFwiIH19XG4gICAgPlxuICAgICAgPEJveCBiYWNrZ3JvdW5kPVwiYWxwaGEtMTBcIiByYWRpdXM9XCJzbVwiIHBhZGRpbmc9ezJ9PlxuICAgICAgICA8SWNvbiBuYW1lPVwicHJvZmlsZS1jYXJkXCIgc2l6ZT1cImxnXCIgLz5cbiAgICAgIDwvQm94PlxuXG4gICAgICA8Q29sIGdhcD17MH0-XG4gICAgICAgIDxUZXh0IHZhbHVlPXtpdGVtLm5hbWV9IHNpemU9XCJzbVwiIHdlaWdodD1cInNlbWlib2xkXCIgLz5cbiAgICAgICAgPENhcHRpb24gdmFsdWU9e2Ake2l0ZW0uZW1haWx9IOKAoiAke2l0ZW0ucGhvbmV9YH0gY29sb3I9XCJzZWNvbmRhcnlcIiAvPlxuICAgICAgPC9Db2w-XG5cbiAgICAgIDxTcGFjZXIgLz5cblxuICAgICAgPE1hcmtkb3duIHZhbHVlPXtgW09wZW4gUHJvZmlsZV0oJHtpdGVtLnNhbGVzZm9yY2VVcmx9KWB9IC8-XG4gICAgPC9MaXN0Vmlld0l0ZW0-XG4gICkpfVxuPC9MaXN0Vmlldz4iLCJkZWZhdWx0U3RhdGUiOnsiZG9jdG9ycyI6W3siaWQiOiIxIiwibmFtZSI6IkRyLiBKYW5lIFNtaXRoLCBNRCIsImVtYWlsIjoiamFuZS5zbWl0aEBleGFtcGxlY2xpbmljLmNvbSIsInBob25lIjoiKDQxNSkgNTU1LTAxMzEiLCJzYWxlc2ZvcmNlVXJsIjoiaHR0cHM6Ly95b3VyZG9tYWluLm15LnNhbGVzZm9yY2UuY29tL2xpZ2h0bmluZy9yL0NvbnRhY3QvMDAzWFhYWFhYWFhYWFhYWFhYL3ZpZXcifSx7ImlkIjoiMiIsIm5hbWUiOiJEci4gUmFmYWVsIEdvbWV6LCBETyIsImVtYWlsIjoicmdvbWV6QG5vcnRoc2hvcmVoZWFsdGgub3JnIiwicGhvbmUiOiIoMzEyKSA1NTUtMDA4OCIsInNhbGVzZm9yY2VVcmwiOiJodHRwczovL3lvdXJkb21haW4ubXkuc2FsZXNmb3JjZS5jb20vbGlnaHRuaW5nL3IvQ29udGFjdC8wMDNZWVlZWVlZWVlZWVlZWVkvdmlldyJ9XX0sInN0YXRlcyI6W119"
+}

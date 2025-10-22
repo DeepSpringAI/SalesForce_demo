@@ -1,0 +1,92 @@
+{
+  "version": "1.0",
+  "name": "Doctor Added",
+  "template": "{\"type\":\"Card\",\"size\":\"sm\",\"children\":[{\"type\":\"Col\",\"align\":\"center\",\"gap\":4,\"padding\":4,\"children\":[{\"type\":\"Box\",\"background\":\"green-400\",\"radius\":\"full\",\"padding\":3,\"children\":[{\"type\":\"Icon\",\"name\":\"check\",\"size\":\"3xl\",\"color\":\"white\",\"children\":[]}]},{\"type\":\"Col\",\"align\":\"center\",\"gap\":1,\"children\":[{\"type\":\"Title\",\"value\":\"Doctor added\",\"children\":[]},{\"type\":\"Text\",\"value\":{{ (doctor.name) | tojson }},\"weight\":\"semibold\",\"children\":[]},{\"type\":\"Caption\",\"value\":{{ ((doctor.specialty ~ \" • \" ~ doctor.location)) | tojson }},\"children\":[]}]}]},{\"type\":\"Row\",\"children\":[]}]}",
+  "jsonSchema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "widget",
+    "type": "object",
+    "properties": {
+      "doctor": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "specialty": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "specialty",
+          "location"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "doctor"
+    ],
+    "additionalProperties": false
+  },
+  "outputJsonPreview": {
+    "type": "Card",
+    "size": "sm",
+    "children": [
+      {
+        "type": "Col",
+        "align": "center",
+        "gap": 4,
+        "padding": 4,
+        "children": [
+          {
+            "type": "Box",
+            "background": "green-400",
+            "radius": "full",
+            "padding": 3,
+            "children": [
+              {
+                "type": "Icon",
+                "name": "check",
+                "size": "3xl",
+                "color": "white"
+              }
+            ]
+          },
+          {
+            "type": "Col",
+            "align": "center",
+            "gap": 1,
+            "children": [
+              {
+                "type": "Title",
+                "value": "Doctor added"
+              },
+              {
+                "type": "Text",
+                "value": "Ava Patel, MD",
+                "weight": "semibold"
+              },
+              {
+                "type": "Caption",
+                "value": "Pediatrics • Downtown Clinic"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Row"
+      }
+    ]
+  },
+  "encodedWidget": "eyJpZCI6IjNiMjEwZmNiLTlkZjUtNGQ3NC05MmFlLTc0M2UyYzE1ODY2MSIsIm5hbWUiOiJEb2N0b3IgQWRkZWQiLCJ2aWV3IjoiPENhcmQgc2l6ZT1cInNtXCI-XG4gIDxDb2wgYWxpZ249XCJjZW50ZXJcIiBnYXA9ezR9IHBhZGRpbmc9ezR9PlxuICAgIDxCb3ggYmFja2dyb3VuZD1cImdyZWVuLTQwMFwiIHJhZGl1cz1cImZ1bGxcIiBwYWRkaW5nPXszfT5cbiAgICAgIDxJY29uIG5hbWU9XCJjaGVja1wiIHNpemU9XCIzeGxcIiBjb2xvcj1cIndoaXRlXCIgLz5cbiAgICA8L0JveD5cbiAgICA8Q29sIGFsaWduPVwiY2VudGVyXCIgZ2FwPXsxfT5cbiAgICAgIDxUaXRsZSB2YWx1ZT1cIkRvY3RvciBhZGRlZFwiIC8-XG4gICAgICA8VGV4dCB2YWx1ZT17ZG9jdG9yLm5hbWV9IHdlaWdodD1cInNlbWlib2xkXCIgLz5cbiAgICAgIDxDYXB0aW9uIHZhbHVlPXtgJHtkb2N0b3Iuc3BlY2lhbHR5fSDigKIgJHtkb2N0b3IubG9jYXRpb259YH0gLz5cbiAgICA8L0NvbD5cbiAgPC9Db2w-XG4gIDxSb3c-XG4gIDwvUm93PlxuPC9DYXJkPiIsImRlZmF1bHRTdGF0ZSI6eyJkb2N0b3IiOnsiaWQiOiJkb2NfODcyMzEiLCJuYW1lIjoiQXZhIFBhdGVsLCBNRCIsInNwZWNpYWx0eSI6IlBlZGlhdHJpY3MiLCJsb2NhdGlvbiI6IkRvd250b3duIENsaW5pYyJ9fSwic3RhdGVzIjpbXX0"
+}

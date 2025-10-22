@@ -1,0 +1,176 @@
+{
+  "version": "1.0",
+  "name": "Product list",
+  "template": "{\"type\":\"ListView\",\"children\":[{%- set _c -%}{%-for item in products -%},{\"type\":\"ListViewItem\",\"key\":{{ (item.id) | tojson }},\"gap\":3,\"onClickAction\":{\"type\":\"product.select\",\"payload\":{\"id\":{{ (item.id) | tojson }}}},\"children\":[{\"type\":\"Box\",\"background\":\"alpha-10\",\"radius\":\"sm\",\"padding\":2,\"children\":[{\"type\":\"Icon\",\"name\":\"cube\",\"size\":\"lg\",\"children\":[]}]},{\"type\":\"Col\",\"gap\":0,\"children\":[{\"type\":\"Text\",\"value\":{{ (item.name) | tojson }},\"size\":\"sm\",\"weight\":\"semibold\",\"children\":[]},{\"type\":\"Caption\",\"value\":{{ (item.price) | tojson }},\"color\":\"secondary\",\"children\":[]}]}]}{%-endfor-%}{%- endset -%}{{- (_c[1:] if _c and _c[0] == ',' else _c) -}}]}",
+  "jsonSchema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "widget",
+    "type": "object",
+    "properties": {
+      "products": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "price": {
+              "type": "string",
+              "pattern": "^\\$\\d+(?:\\.\\d{2})?$"
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "price"
+          ],
+          "additionalProperties": false
+        },
+        "minItems": 3
+      }
+    },
+    "required": [
+      "products"
+    ],
+    "additionalProperties": false
+  },
+  "outputJsonPreview": {
+    "type": "ListView",
+    "children": [
+      {
+        "type": "ListViewItem",
+        "key": "p1",
+        "gap": 3,
+        "onClickAction": {
+          "type": "product.select",
+          "payload": {
+            "id": "p1"
+          }
+        },
+        "children": [
+          {
+            "type": "Box",
+            "background": "alpha-10",
+            "radius": "sm",
+            "padding": 2,
+            "children": [
+              {
+                "type": "Icon",
+                "name": "cube",
+                "size": "lg"
+              }
+            ]
+          },
+          {
+            "type": "Col",
+            "gap": 0,
+            "children": [
+              {
+                "type": "Text",
+                "value": "Blue Folding Chair",
+                "size": "sm",
+                "weight": "semibold"
+              },
+              {
+                "type": "Caption",
+                "value": "$20.00",
+                "color": "secondary"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "ListViewItem",
+        "key": "p2",
+        "gap": 3,
+        "onClickAction": {
+          "type": "product.select",
+          "payload": {
+            "id": "p2"
+          }
+        },
+        "children": [
+          {
+            "type": "Box",
+            "background": "alpha-10",
+            "radius": "sm",
+            "padding": 2,
+            "children": [
+              {
+                "type": "Icon",
+                "name": "cube",
+                "size": "lg"
+              }
+            ]
+          },
+          {
+            "type": "Col",
+            "gap": 0,
+            "children": [
+              {
+                "type": "Text",
+                "value": "Wireless Mouse",
+                "size": "sm",
+                "weight": "semibold"
+              },
+              {
+                "type": "Caption",
+                "value": "$15.99",
+                "color": "secondary"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "ListViewItem",
+        "key": "p3",
+        "gap": 3,
+        "onClickAction": {
+          "type": "product.select",
+          "payload": {
+            "id": "p3"
+          }
+        },
+        "children": [
+          {
+            "type": "Box",
+            "background": "alpha-10",
+            "radius": "sm",
+            "padding": 2,
+            "children": [
+              {
+                "type": "Icon",
+                "name": "cube",
+                "size": "lg"
+              }
+            ]
+          },
+          {
+            "type": "Col",
+            "gap": 0,
+            "children": [
+              {
+                "type": "Text",
+                "value": "Notebook",
+                "size": "sm",
+                "weight": "semibold"
+              },
+              {
+                "type": "Caption",
+                "value": "$3.49",
+                "color": "secondary"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "encodedWidget": "eyJpZCI6ImU5MDExNGFlLTAxNmEtNDliYS05MWZmLTdjZDQ5YWViMjgxMSIsIm5hbWUiOiJQcm9kdWN0IGxpc3QiLCJ2aWV3IjoiPExpc3RWaWV3PlxuICB7cHJvZHVjdHMubWFwKChpdGVtKSA9PiAoXG4gICAgPExpc3RWaWV3SXRlbVxuICAgICAga2V5PXtpdGVtLmlkfVxuICAgICAgZ2FwPXszfVxuICAgICAgb25DbGlja0FjdGlvbj17eyB0eXBlOiBcInByb2R1Y3Quc2VsZWN0XCIsIHBheWxvYWQ6IHsgaWQ6IGl0ZW0uaWQgfSB9fVxuICAgID5cbiAgICAgIDxCb3ggYmFja2dyb3VuZD1cImFscGhhLTEwXCIgcmFkaXVzPVwic21cIiBwYWRkaW5nPXsyfT5cbiAgICAgICAgPEljb24gbmFtZT1cImN1YmVcIiBzaXplPVwibGdcIiAvPlxuICAgICAgPC9Cb3g-XG5cbiAgICAgIDxDb2wgZ2FwPXswfT5cbiAgICAgICAgPFRleHQgdmFsdWU9e2l0ZW0ubmFtZX0gc2l6ZT1cInNtXCIgd2VpZ2h0PVwic2VtaWJvbGRcIiAvPlxuICAgICAgICA8Q2FwdGlvbiB2YWx1ZT17aXRlbS5wcmljZX0gY29sb3I9XCJzZWNvbmRhcnlcIiAvPlxuICAgICAgPC9Db2w-XG4gICAgPC9MaXN0Vmlld0l0ZW0-XG4gICkpfVxuPC9MaXN0Vmlldz4iLCJkZWZhdWx0U3RhdGUiOnsicHJvZHVjdHMiOlt7ImlkIjoicDEiLCJuYW1lIjoiQmx1ZSBGb2xkaW5nIENoYWlyIiwicHJpY2UiOiIkMjAuMDAifSx7ImlkIjoicDIiLCJuYW1lIjoiV2lyZWxlc3MgTW91c2UiLCJwcmljZSI6IiQxNS45OSJ9LHsiaWQiOiJwMyIsIm5hbWUiOiJOb3RlYm9vayIsInByaWNlIjoiJDMuNDkifV19LCJzdGF0ZXMiOltdfQ"
+}
