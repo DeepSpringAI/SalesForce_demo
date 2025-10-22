@@ -1,0 +1,17 @@
+# ChatKit FastAPI Server Dependencies
+
+# FastAPI and server
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+
+# OpenAI SDK with ChatKit support
+openai>=1.3.0
+
+# Data validation
+pydantic==2.5.0
+
+# CORS support
+python-multipart==0.0.6
+
+# Optional: for better logging and development
+python-dotenv==1.0.0
