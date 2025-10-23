@@ -22,40 +22,50 @@ app.add_middleware(
 # Mount API routes from the ChatKit server
 @app.post("/api/chatkit/session")
 async def create_session(request: Request):
-    return await server.create_simple_session(server.SessionRequest(), request)
+    print(f"🔥 Combined server received ChatKit session request from {request.client.host}")
+    print(f"📋 Request headers: {dict(request.headers)}")
+    try:
+        body = await request.json()
+        print(f"📄 Request body: {body}")
+    except:
+        print("📄 No JSON body or failed to parse")
+    
+    result = await server.create_simple_session(server.SessionRequest(), request)
+    print(f"✅ Combined server returning: {result}")
+    return result
 
 @app.get("/api/health")
 async def health():
     return {"status": "healthy"}
 
 # Serve static files
-if os.path.exists("static"):
+if os.path.exists("build"):
     # Mount static files at root for React build assets
-    app.mount("/static", StaticFiles(directory="static/static"), name="react-static")
+    app.mount("/static", StaticFiles(directory="build/static"), name="react-static")
     
     # Serve React build assets directly
     @app.get("/js/{file_path:path}")
     async def serve_js(file_path: str):
-        return FileResponse(f"static/static/js/{file_path}")
+        return FileResponse(f"build/static/js/{file_path}")
     
     @app.get("/css/{file_path:path}")
     async def serve_css(file_path: str):
-        return FileResponse(f"static/static/css/{file_path}")
+        return FileResponse(f"build/static/css/{file_path}")
     
     @app.get("/media/{file_path:path}")
     async def serve_media(file_path: str):
-        return FileResponse(f"static/static/media/{file_path}")
+        return FileResponse(f"build/static/media/{file_path}")
 
     # Serve React app for all other routes
     @app.get("/{path:path}")
     async def serve_react(path: str = ""):
         # Check if it's a static file in the root
-        static_file = f"static/{path}"
-        if path and os.path.exists(static_file) and os.path.isfile(static_file):
-            return FileResponse(static_file)
+        build_file = f"build/{path}"
+        if path and os.path.exists(build_file) and os.path.isfile(build_file):
+            return FileResponse(build_file)
         
         # Serve index.html for React Router
-        return FileResponse("static/index.html")
+        return FileResponse("build/index.html")
 
 if __name__ == "__main__":
     import uvicorn

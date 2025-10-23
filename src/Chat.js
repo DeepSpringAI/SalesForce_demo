@@ -31,9 +31,18 @@ export function MyChat() {
           const currentOrigin = window.location.origin;
           console.log('🌐 Current origin:', currentOrigin);
           
-          // Determine API endpoint - use environment variable or default to localhost
-          const apiEndpoint = process.env.REACT_APP_API_URL || 'http://localhost:8000';
-          console.log('🔗 API endpoint:', apiEndpoint);
+          // Determine API endpoint - use environment variable, relative path for production, or localhost for development
+          let apiEndpoint;
+          if (process.env.REACT_APP_API_URL) {
+            apiEndpoint = process.env.REACT_APP_API_URL;
+          } else if (process.env.NODE_ENV === 'production') {
+            // In production (built app), use relative path since we're served from the same server
+            apiEndpoint = '';
+          } else {
+            // In development, use localhost
+            apiEndpoint = 'http://localhost:8000';
+          }
+          console.log('🔗 API endpoint:', apiEndpoint || 'relative');
           
           const res = await fetch(`${apiEndpoint}/api/chatkit/session`, {
             method: 'POST',
