@@ -33,12 +33,16 @@ COPY server.py .
 COPY combined_server.py .
 
 # Copy built React app
-COPY --from=react-builder /app/build ./static
+COPY --from=react-builder /app/build ./build
 
 # Create non-root user
 RUN useradd --create-home --shell /bin/bash app \
     && chown -R app:app /app
 USER app
+
+# Set environment variables
+ENV NODE_ENV=production
+ENV PYTHONPATH=/app
 
 # Expose port
 EXPOSE 8000
@@ -47,5 +51,5 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
     CMD curl -f http://localhost:8000/api/health || exit 1
 
-# Run combined server
-CMD ["python", "combined_server.py"]
+# Run combined server with uvicorn
+CMD ["uvicorn", "combined_server:app", "--host", "0.0.0.0", "--port", "8000"]

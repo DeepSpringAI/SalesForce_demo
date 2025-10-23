@@ -12,6 +12,8 @@ help:
 	@echo "  make kill-port-8000 - Kill all processes on port 8000"
 	@echo "  make clean         - Clean build artifacts"
 	@echo "  make test-api      - Test API endpoint"
+	@echo "  make docker-build  - Build Docker image"
+	@echo "  make docker-run    - Run Docker container"
 
 # Install dependencies
 install:
@@ -50,6 +52,21 @@ test-api:
 		-H "Content-Type: application/json" \
 		-d '{"origin": "http://localhost:8000"}' \
 		|| echo "API test failed - make sure server is running with 'make server'"
+
+# Build Docker image
+docker-build:
+	@echo "Building Docker image..."
+	docker build -t chatkit-demo .
+
+# Run Docker container
+docker-run: docker-build
+	@echo "Running Docker container on port 8000..."
+	@if [ -f .env ]; then \
+		docker run -p 8000:8000 --env-file .env chatkit-demo; \
+	else \
+		echo "Warning: .env file not found. Running without environment file."; \
+		docker run -p 8000:8000 chatkit-demo; \
+	fi
 
 # Clean build artifacts
 clean:
