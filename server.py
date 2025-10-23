@@ -7,6 +7,8 @@ import time
 from dotenv import load_dotenv
 import requests
 import re
+import random
+import string
 load_dotenv()
 
 app = FastAPI()
@@ -22,6 +24,11 @@ app.add_middleware(
 
 openai_client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
+def generate_random_user_id(length=10):
+    """Generate a random user ID with letters and numbers"""
+    characters = string.ascii_letters + string.digits  # a-z, A-Z, 0-9
+    return ''.join(random.choice(characters) for _ in range(length))
+
 class SessionRequest(BaseModel):
     origin: str = None  # Optional: the domain where ChatKit will be used
 
@@ -29,7 +36,7 @@ class SessionRequest(BaseModel):
 def create_simple_session(request: SessionRequest = SessionRequest(), http_request: Request = None):
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
     WORKFLOW_ID = os.getenv("CHATKIT_WORKFLOW_ID", "wf_68eca7578e9c8190a0085207d7b7ce84081ad591929c024f")
-    USER_ID = os.getenv("USER_ID", "user_default_id")
+    USER_ID = os.getenv("USER_ID", generate_random_user_id())
     DOMAIN_KEY = os.getenv("OPENAI_DOMAIN_KEY", "domain_pk_68f899197ff48190a4f3ed7002a08dc10fdc9f3a5fb67a88")
     
     # Get the origin from request or headers
@@ -38,6 +45,7 @@ def create_simple_session(request: SessionRequest = SessionRequest(), http_reque
         origin = http_request.headers.get("origin") or http_request.headers.get("referer")
     
     print(f"🌐 Creating session for origin: {origin}")
+    print(f"👤 Generated user ID: {USER_ID}")
     print(f"🔑 Using domain key: {DOMAIN_KEY[:20]}...")
     
     # Build session payload - only use supported parameters
