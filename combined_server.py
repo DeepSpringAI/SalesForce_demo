@@ -30,7 +30,7 @@ async def create_session(request: Request):
     except:
         print("📄 No JSON body or failed to parse")
     
-    result = await server.create_simple_session(server.SessionRequest(), request)
+    result = server.create_simple_session(server.SessionRequest(), request)
     print(f"✅ Combined server returning: {result}")
     return result
 
