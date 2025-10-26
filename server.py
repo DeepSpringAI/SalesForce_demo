@@ -31,12 +31,14 @@ def generate_random_user_id(length=10):
 
 class SessionRequest(BaseModel):
     origin: str = None  # Optional: the domain where ChatKit will be used
+    userId: str = None  # Optional: custom user ID from frontend
 
 @app.post("/api/chatkit/session")
 def create_simple_session(request: SessionRequest = SessionRequest(), http_request: Request = None):
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
     WORKFLOW_ID = os.getenv("CHATKIT_WORKFLOW_ID", "wf_68eca7578e9c8190a0085207d7b7ce84081ad591929c024f")
-    USER_ID = os.getenv("USER_ID", generate_random_user_id())
+    # Use custom userId from request if provided, otherwise fall back to env or random
+    USER_ID = request.userId if request.userId else os.getenv("USER_ID", generate_random_user_id())
     DOMAIN_KEY = os.getenv("OPENAI_DOMAIN_KEY", "domain_pk_68f899197ff48190a4f3ed7002a08dc10fdc9f3a5fb67a88")
     
     # Get the origin from request or headers
@@ -109,4 +111,4 @@ def health_check():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run('server:app', host="0.0.0.0", port=8000, reload=True)
