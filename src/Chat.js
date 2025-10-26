@@ -14,7 +14,7 @@ const generateRandomLastname = () => {
   return lastname;
 };
 
-export function MyChat({ userId }) {
+export function MyChat() {
   const chatkit = useChatKit({
     api: {
       async getClientSecret(existing) {
@@ -50,8 +50,7 @@ export function MyChat({ userId }) {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              origin: currentOrigin,
-              userId: userId // Pass custom userId if provided
+              origin: currentOrigin
             }),
           });
           
@@ -153,17 +152,6 @@ const Chat = () => {
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const [scriptError, setScriptError] = useState(false);
   const [showSimpleChat, setShowSimpleChat] = useState(false);
-  const [customUserId, setCustomUserId] = useState(localStorage.getItem('customUserId') || '');
-  const [showUserIdModal, setShowUserIdModal] = useState(false);
-  const [userIdInput, setUserIdInput] = useState('');
-  const [userSetupComplete, setUserSetupComplete] = useState(localStorage.getItem('customUserId') ? true : false);
-
-  useEffect(() => {
-    // Show user ID modal on startup if no user ID is saved
-    if (!localStorage.getItem('customUserId')) {
-      setShowUserIdModal(true);
-    }
-  }, []);
 
   useEffect(() => {
     // Check if ChatKit script is loaded
@@ -195,23 +183,6 @@ const Chat = () => {
     };
   }, [scriptLoaded]);
 
-  const handleSaveUserId = () => {
-    const userId = userIdInput.trim();
-    if (userId) {
-      setCustomUserId(userId);
-      localStorage.setItem('customUserId', userId);
-      console.log('👤 Custom User ID set:', userId);
-    } else {
-      // User chose to use random ID, clear any existing saved ID
-      setCustomUserId('');
-      localStorage.removeItem('customUserId');
-      console.log('👤 Using random User ID');
-    }
-    setShowUserIdModal(false);
-    setUserIdInput('');
-    setUserSetupComplete(true); // Mark setup as complete so chat can initialize
-  };
-
 
   return (
     <div style={{ 
@@ -227,82 +198,42 @@ const Chat = () => {
         borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
         boxShadow: '0 2px 20px rgba(0, 0, 0, 0.1)'
       }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '15px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-            <div style={{
-              width: '50px',
-              height: '50px',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              borderRadius: '12px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '24px',
-              color: 'white',
-              fontWeight: 'bold'
-            }}>
-              Rx
-            </div>
-            <div>
-              <h1 style={{ 
-                margin: 0, 
-                fontSize: '28px', 
-                fontWeight: '700',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text'
-              }}>
-                PharmaAI Salesforce Assistant
-              </h1>
-              <p style={{ 
-                margin: '5px 0 0 0', 
-                color: '#666', 
-                fontSize: '16px',
-                fontWeight: '400'
-              }}>
-                Intelligent pharmaceutical sales support powered by AI
-              </p>
-            </div>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '15px' }}>
+          <div style={{
+            width: '50px',
+            height: '50px',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            borderRadius: '12px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '24px',
+            color: 'white',
+            fontWeight: 'bold'
+          }}>
+            Rx
           </div>
-          {/* User ID button */}
-          <button
-            onClick={() => {
-              setUserIdInput(customUserId);
-              setShowUserIdModal(true);
-              setUserSetupComplete(false); // Prevent chat from initializing during edit
-            }}
-            style={{
-              width: '40px',
-              height: '40px',
-              background: customUserId ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' : 'rgba(102, 126, 234, 0.1)',
-              border: customUserId ? 'none' : '2px solid #667eea',
-              borderRadius: '50%',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '18px',
-              color: customUserId ? '#fff' : '#667eea',
-              transition: 'all 0.3s ease',
-              position: 'relative'
-            }}
-            title={customUserId ? `User ID: ${customUserId}` : 'Set User ID'}
-          >
-            👤
-            {customUserId && (
-              <span style={{
-                position: 'absolute',
-                top: '-4px',
-                right: '-4px',
-                width: '12px',
-                height: '12px',
-                background: '#28a745',
-                borderRadius: '50%',
-                border: '2px solid white'
-              }}></span>
-            )}
-          </button>
+          <div>
+            <h1 style={{ 
+              margin: 0, 
+              fontSize: '28px', 
+              fontWeight: '700',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
+            }}>
+              PharmaAI Salesforce Assistant
+            </h1>
+            <p style={{ 
+              margin: '5px 0 0 0', 
+              color: '#666', 
+              fontSize: '16px',
+              fontWeight: '400'
+            }}>
+              Intelligent pharmaceutical sales support powered by AI
+            </p>
+          </div>
         </div>
       </div>
 
@@ -407,8 +338,8 @@ const Chat = () => {
         }}>
           {showSimpleChat ? (
             <SimpleChat />
-          ) : scriptLoaded && userSetupComplete ? (
-            <MyChat userId={customUserId} />
+          ) : scriptLoaded ? (
+            <MyChat />
           ) : (
             <div style={{ 
               height: '600px', 
@@ -479,131 +410,6 @@ const Chat = () => {
           )}
         </div>
       </div>
-
-      {/* User ID Modal */}
-      {showUserIdModal && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'rgba(0, 0, 0, 0.5)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1000
-        }} onClick={customUserId ? () => {
-          setShowUserIdModal(false);
-          setUserSetupComplete(true); // Restore to ready state
-        } : undefined}>
-          <div style={{
-            background: 'white',
-            borderRadius: '16px',
-            padding: '30px',
-            maxWidth: '500px',
-            width: '90%',
-            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)'
-          }} onClick={(e) => e.stopPropagation()}>
-            <h2 style={{ margin: '0 0 20px 0', fontSize: '24px', color: '#333' }}>
-              User ID
-            </h2>
-            <p style={{ margin: '0 0 15px 0', color: '#666', fontSize: '14px' }}>
-              Enter a custom user ID or leave empty to use a random ID.
-            </p>
-            <input
-              type="text"
-              value={userIdInput}
-              onChange={(e) => setUserIdInput(e.target.value)}
-              placeholder="Enter User ID (optional)"
-              style={{
-                width: '100%',
-                padding: '12px',
-                fontSize: '16px',
-                border: '2px solid #ddd',
-                borderRadius: '8px',
-                marginBottom: '20px',
-                boxSizing: 'border-box'
-              }}
-              onKeyPress={(e) => {
-                if (e.key === 'Enter') {
-                  handleSaveUserId();
-                }
-              }}
-            />
-            {customUserId && (
-              <p style={{ margin: '0 0 15px 0', fontSize: '13px', color: '#666' }}>
-                Current User ID: <strong>{customUserId}</strong>
-              </p>
-            )}
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <button
-                onClick={handleSaveUserId}
-                style={{
-                  flex: 1,
-                  padding: '12px',
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '8px',
-                  fontSize: '16px',
-                  fontWeight: '600',
-                  cursor: 'pointer'
-                }}
-              >
-                {userIdInput.trim() ? 'Save' : 'Continue with Random ID'}
-              </button>
-              {customUserId && (
-                <>
-                  <button
-                    onClick={() => {
-                      setCustomUserId('');
-                      localStorage.removeItem('customUserId');
-                      console.log('👤 Custom User ID removed');
-                      setShowUserIdModal(false);
-                      setUserIdInput('');
-                      setUserSetupComplete(true); // Allow chat to initialize
-                    }}
-                    style={{
-                      flex: 1,
-                      padding: '12px',
-                      background: '#dc3545',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '8px',
-                      fontSize: '16px',
-                      fontWeight: '600',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    Remove
-                  </button>
-                  <button
-                    onClick={() => {
-                      setShowUserIdModal(false);
-                      setUserIdInput('');
-                      setUserSetupComplete(true); // Restore to ready state
-                    }}
-                    style={{
-                      flex: 1,
-                      padding: '12px',
-                      background: '#f0f0f0',
-                      color: '#333',
-                      border: 'none',
-                      borderRadius: '8px',
-                      fontSize: '16px',
-                      fontWeight: '600',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    Cancel
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
