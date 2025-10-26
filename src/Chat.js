@@ -44,33 +44,15 @@ export function MyChat({ userId }) {
           }
           console.log('🔗 API endpoint:', apiEndpoint || 'relative');
           
-          // Ensure userId is never empty - generate one if needed
-          let finalUserId = userId;
-          if (!finalUserId || finalUserId.trim() === '') {
-            finalUserId = localStorage.getItem('customUserId');
-            if (!finalUserId) {
-              // Last resort: generate a random ID
-              finalUserId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-              localStorage.setItem('customUserId', finalUserId);
-              localStorage.setItem('userIdMode', 'random');
-              console.log('🔄 Generated new random userId:', finalUserId);
-            }
-          }
-          
-          const requestBody = {
-            origin: currentOrigin,
-            userId: finalUserId
-          };
-          
-          console.log('🔄 Creating session with userId:', finalUserId);
-          console.log('📤 Request body:', requestBody);
-          
           const res = await fetch(`${apiEndpoint}/api/chatkit/session`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify(requestBody),
+            body: JSON.stringify({
+              origin: currentOrigin,
+              userId: userId // Pass custom userId if provided
+            }),
           });
           
           console.log('Session response status:', res.status);
@@ -218,15 +200,12 @@ const Chat = () => {
     if (userId) {
       setCustomUserId(userId);
       localStorage.setItem('customUserId', userId);
-      localStorage.setItem('userIdMode', 'custom');
       console.log('👤 Custom User ID set:', userId);
     } else {
-      // User chose to use random ID, save a persistent random ID
-      const randomUserId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-      setCustomUserId(randomUserId);
-      localStorage.setItem('customUserId', randomUserId);
-      localStorage.setItem('userIdMode', 'random');
-      console.log('👤 Using random User ID:', randomUserId);
+      // User chose to use random ID, clear any existing saved ID
+      setCustomUserId('');
+      localStorage.removeItem('customUserId');
+      console.log('👤 Using random User ID');
     }
     setShowUserIdModal(false);
     setUserIdInput('');
@@ -578,16 +557,12 @@ const Chat = () => {
                 <>
                   <button
                     onClick={() => {
-                      // Generate a new random ID when removing custom ID
-                      const randomUserId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-                      setCustomUserId(randomUserId);
-                      localStorage.setItem('customUserId', randomUserId);
-                      localStorage.setItem('userIdMode', 'random');
-                      console.log('👤 Custom User ID removed, using random:', randomUserId);
+                      setCustomUserId('');
+                      localStorage.removeItem('customUserId');
+                      console.log('👤 Custom User ID removed');
                       setShowUserIdModal(false);
                       setUserIdInput('');
-                      // Force reload to get new session with new ID
-                      window.location.reload();
+                      setUserSetupComplete(true); // Allow chat to initialize
                     }}
                     style={{
                       flex: 1,
@@ -601,12 +576,13 @@ const Chat = () => {
                       cursor: 'pointer'
                     }}
                   >
-                    Switch to Random ID
+                    Remove
                   </button>
                   <button
                     onClick={() => {
                       setShowUserIdModal(false);
                       setUserIdInput('');
+                      setUserSetupComplete(true); // Restore to ready state
                     }}
                     style={{
                       flex: 1,
