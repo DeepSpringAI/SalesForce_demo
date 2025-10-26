@@ -37,17 +37,25 @@ class SessionRequest(BaseModel):
 def create_simple_session(request: SessionRequest = SessionRequest(), http_request: Request = None):
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
     WORKFLOW_ID = os.getenv("CHATKIT_WORKFLOW_ID", "wf_68eca7578e9c8190a0085207d7b7ce84081ad591929c024f")
-    # Use custom userId from request if provided, otherwise fall back to env or random
-    USER_ID = request.userId if request.userId else os.getenv("USER_ID", generate_random_user_id())
-    DOMAIN_KEY = os.getenv("OPENAI_DOMAIN_KEY", "domain_pk_68f899197ff48190a4f3ed7002a08dc10fdc9f3a5fb67a88")
     
     # Get the origin from request or headers
     origin = request.origin
     if not origin and http_request:
         origin = http_request.headers.get("origin") or http_request.headers.get("referer")
     
+    # Handle userId: always expect a userId from frontend
+    # Empty string means frontend wants random, but frontend should have already generated one
+    if not request.userId:
+        # Fallback: generate random ID if frontend didn't provide one (shouldn't happen)
+        USER_ID = generate_random_user_id()
+        print(f"⚠️ No userId provided, generating random: {USER_ID}")
+    else:
+        USER_ID = request.userId
+        print(f"👤 Using user ID from request: {USER_ID}")
+    
+    DOMAIN_KEY = os.getenv("OPENAI_DOMAIN_KEY", "domain_pk_68f899197ff48190a4f3ed7002a08dc10fdc9f3a5fb67a88")
+    
     print(f"🌐 Creating session for origin: {origin}")
-    print(f"👤 Generated user ID: {USER_ID}")
     print(f"🔑 Using domain key: {DOMAIN_KEY[:20]}...")
     
     # Build session payload - only use supported parameters
