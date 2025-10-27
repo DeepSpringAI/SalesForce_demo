@@ -8,6 +8,7 @@ const VoiceRecorder = ({ onTranscriptionComplete }) => {
   const [isMobile, setIsMobile] = useState(false);
   const mediaRecorderRef = useRef(null);
   const intervalRef = useRef(null);
+  const recordingMimeTypeRef = useRef(null);
 
   // Check for mobile vs desktop
   useEffect(() => {
@@ -77,7 +78,17 @@ const VoiceRecorder = ({ onTranscriptionComplete }) => {
           setRecordingMode('mic');
         }
         
-        const mediaRecorder = new MediaRecorder(stream);
+        // Get the actual MIME type supported by the browser
+        const mimeType = MediaRecorder.isTypeSupported('audio/webm') 
+          ? 'audio/webm' 
+          : MediaRecorder.isTypeSupported('audio/mp4') 
+            ? 'audio/mp4'
+            : 'audio/mpeg';
+        
+        console.log('🎤 Using MIME type:', mimeType);
+        recordingMimeTypeRef.current = mimeType;
+        
+        const mediaRecorder = new MediaRecorder(stream, { mimeType });
         mediaRecorderRef.current = mediaRecorder;
         
         const chunks = [];
@@ -88,7 +99,8 @@ const VoiceRecorder = ({ onTranscriptionComplete }) => {
         };
 
         mediaRecorder.onstop = () => {
-          const blob = new Blob(chunks, { type: 'audio/webm' });
+          const blob = new Blob(chunks, { type: recordingMimeTypeRef.current });
+          console.log('🎵 Recording completed, MIME type:', recordingMimeTypeRef.current);
           stream.getTracks().forEach(track => track.stop());
           
           // Automatically transcribe the audio (no need to store URL)
@@ -108,8 +120,27 @@ const VoiceRecorder = ({ onTranscriptionComplete }) => {
   const transcribeAudio = async (blob) => {
     setIsTranscribing(true);
     try {
-      // Convert blob to File
-      const audioFile = new File([blob], 'recording.webm', { type: 'audio/webm' });
+      // Get the correct file extension based on MIME type
+      const getFileExtension = (mimeType) => {
+        const extMap = {
+          'audio/webm': 'webm',
+          'audio/mp4': 'm4a',
+          'audio/mpeg': 'mp3',
+          'audio/ogg': 'ogg',
+          'audio/wav': 'wav',
+          'audio/flac': 'flac'
+        };
+        return extMap[mimeType] || 'webm';
+      };
+      
+      const mimeType = recordingMimeTypeRef.current || 'audio/webm';
+      const extension = getFileExtension(mimeType);
+      const filename = `recording.${extension}`;
+      
+      console.log('📤 Uploading audio file:', filename, 'MIME type:', mimeType);
+      
+      // Convert blob to File with correct MIME type and extension
+      const audioFile = new File([blob], filename, { type: mimeType });
       
       // Create FormData
       const formData = new FormData();
