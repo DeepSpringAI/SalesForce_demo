@@ -1,8 +1,9 @@
 // src/Chat.js
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ChatKit, useChatKit } from '@openai/chatkit-react';
 import { SimpleChat } from './SimpleChat';
+import VoiceRecorder from './VoiceRecorder';
 
 // Function to generate random 5-letter lastname
 const generateRandomLastname = () => {
@@ -15,6 +16,9 @@ const generateRandomLastname = () => {
 };
 
 export function MyChat() {
+  // Store chatkit reference to pass to VoiceRecorder
+  const chatkitRef = useRef(null);
+  
   const chatkit = useChatKit({
     api: {
       async getClientSecret(existing) {
@@ -129,11 +133,11 @@ export function MyChat() {
     },
   });
 
+  // Store chatkit reference
+  chatkitRef.current = chatkit;
+
   return (
-    <div>
-      <div style={{ marginBottom: '10px', padding: '10px', backgroundColor: '#f0f8ff', borderRadius: '4px', fontSize: '12px' }}>
-        <strong>Debug Info:</strong> Check browser console for detailed logs. If you see "Something went wrong", check the Network tab for failed requests.
-      </div>
+    <>
       <ChatKit 
         control={chatkit.control} 
         style={{ 
@@ -143,7 +147,20 @@ export function MyChat() {
           borderRadius: '16px'
         }} 
       />
-    </div>
+      <VoiceRecorder onTranscriptionComplete={async (text) => {
+        // Send transcription to ChatKit input box
+        if (chatkit && chatkit.setComposerValue) {
+          try {
+            await chatkit.setComposerValue({ text: text });
+            // Also focus the composer
+            await chatkit.focusComposer();
+            console.log('Transcription sent to ChatKit:', text);
+          } catch (error) {
+            console.error('Error setting composer text:', error);
+          }
+        }
+      }} />
+    </>
   );
 }
 
@@ -268,6 +285,7 @@ const Chat = () => {
             </span>
           </div>
         )}
+
 
         {/* Loading State */}
         {!scriptLoaded && !scriptError && (
