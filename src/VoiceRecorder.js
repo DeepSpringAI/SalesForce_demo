@@ -5,8 +5,21 @@ const VoiceRecorder = ({ onTranscriptionComplete }) => {
   const [elapsedTime, setElapsedTime] = useState(0);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [recordingMode, setRecordingMode] = useState('mic'); // 'mic' or 'mic+system'
+  const [isMobile, setIsMobile] = useState(false);
   const mediaRecorderRef = useRef(null);
   const intervalRef = useRef(null);
+
+  // Check for mobile vs desktop
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
 
   useEffect(() => {
     if (isRecording) {
@@ -153,15 +166,20 @@ const VoiceRecorder = ({ onTranscriptionComplete }) => {
       {/* Floating White Button */}
       <div style={{
         position: 'fixed',
-        bottom: '80px',
-        right: '30px',
+        ...(isMobile ? {
+          top: '30px',
+          left: '20px',
+        } : {
+          bottom: '80px',
+          right: '30px',
+        }),
         zIndex: 1000
       }}>
         <button
           onClick={toggleRecording}
           style={{
-            width: '64px',
-            height: '64px',
+            width: isMobile ? '56px' : '64px',
+            height: isMobile ? '56px' : '64px',
             borderRadius: '50%',
             background: isRecording 
               ? 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)' 
@@ -174,7 +192,7 @@ const VoiceRecorder = ({ onTranscriptionComplete }) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontSize: '24px',
+            fontSize: isMobile ? '22px' : '24px',
             transition: 'all 0.3s ease',
             transform: isRecording ? 'scale(1.05)' : 'scale(1)'
           }}
@@ -186,8 +204,13 @@ const VoiceRecorder = ({ onTranscriptionComplete }) => {
         {isRecording && (
           <div style={{
             position: 'absolute',
-            top: '-50px',
-            right: '0',
+            ...(isMobile ? {
+              top: '70px',
+              left: '0',
+            } : {
+              top: '-50px',
+              right: '0',
+            }),
             background: '#dc3545',
             color: 'white',
             padding: '8px 16px',
@@ -211,8 +234,13 @@ const VoiceRecorder = ({ onTranscriptionComplete }) => {
       {isTranscribing && (
         <div style={{
           position: 'fixed',
-          bottom: '160px',
-          right: '30px',
+          ...(isMobile ? {
+            top: '110px',
+            left: '20px',
+          } : {
+            bottom: '160px',
+            right: '30px',
+          }),
           background: 'white',
           borderRadius: '16px',
           padding: '20px 30px',
