@@ -137,14 +137,13 @@ export function MyChat() {
   chatkitRef.current = chatkit;
 
   return (
-    <>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <ChatKit 
         control={chatkit.control} 
         style={{ 
-          height: '600px', 
+          flex: 1,
           width: '100%',
-          border: 'none',
-          borderRadius: '16px'
+          border: 'none'
         }} 
       />
       <VoiceRecorder onTranscriptionComplete={async (text) => {
@@ -160,7 +159,7 @@ export function MyChat() {
           }
         }
       }} />
-    </>
+    </div>
   );
 }
 
@@ -169,6 +168,19 @@ const Chat = () => {
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const [scriptError, setScriptError] = useState(false);
   const [showSimpleChat, setShowSimpleChat] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check for mobile vs desktop
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
 
   useEffect(() => {
     // Check if ChatKit script is loaded
@@ -203,140 +215,161 @@ const Chat = () => {
 
   return (
     <div style={{ 
-      minHeight: '100vh',
+      height: '100vh',
       background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
     }}>
-      {/* Header */}
-      <div style={{
-        background: 'rgba(255, 255, 255, 0.95)',
-        backdropFilter: 'blur(10px)',
-        padding: '20px',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
-        boxShadow: '0 2px 20px rgba(0, 0, 0, 0.1)'
-      }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <div style={{
-            width: '50px',
-            height: '50px',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            borderRadius: '12px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '24px',
-            color: 'white',
-            fontWeight: 'bold'
-          }}>
-            Rx
-          </div>
-          <div>
-            <h1 style={{ 
-              margin: 0, 
-              fontSize: '28px', 
-              fontWeight: '700',
+      {/* Header - Desktop Only */}
+      {!isMobile && (
+        <div style={{
+          background: 'rgba(255, 255, 255, 0.95)',
+          backdropFilter: 'blur(10px)',
+          padding: '20px',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
+          boxShadow: '0 2px 20px rgba(0, 0, 0, 0.1)'
+        }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '15px' }}>
+            <div style={{
+              width: '50px',
+              height: '50px',
               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
+              borderRadius: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '24px',
+              color: 'white',
+              fontWeight: 'bold'
             }}>
-              PharmaAI Salesforce Assistant
-            </h1>
-            <p style={{ 
-              margin: '5px 0 0 0', 
-              color: '#666', 
-              fontSize: '16px',
-              fontWeight: '400'
-            }}>
-              Intelligent pharmaceutical sales support powered by AI
-            </p>
+              Rx
+            </div>
+            <div>
+              <h1 style={{ 
+                margin: 0, 
+                fontSize: '28px', 
+                fontWeight: '700',
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}>
+                PharmaAI Salesforce Assistant
+              </h1>
+              <p style={{ 
+                margin: '5px 0 0 0', 
+                color: '#666', 
+                fontSize: '16px',
+                fontWeight: '400'
+              }}>
+                Intelligent pharmaceutical sales support powered by AI
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Main Content */}
       <div style={{ 
-        maxWidth: '1200px', 
-        margin: '0 auto', 
-        padding: '40px 20px'
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        ...(isMobile ? {
+          padding: '10px'
+        } : {
+          maxWidth: '1200px',
+          margin: '0 auto',
+          padding: '40px 20px'
+        })
       }}>
-        {/* Status indicator - simplified */}
-        {scriptLoaded && (
-          <div style={{ 
-            marginBottom: '30px',
-            padding: '15px 20px',
-            background: 'rgba(255, 255, 255, 0.9)',
-            borderRadius: '12px',
-            border: '1px solid rgba(40, 167, 69, 0.3)',
-            boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px'
-          }}>
-            <div style={{
-              width: '12px',
-              height: '12px',
-              backgroundColor: '#28a745',
-              borderRadius: '50%',
-              animation: 'pulse 2s infinite'
-            }}></div>
-            <span style={{ color: '#28a745', fontWeight: '600', fontSize: '14px' }}>
-              AI Assistant Ready
-            </span>
-          </div>
-        )}
 
 
         {/* Loading State */}
         {!scriptLoaded && !scriptError && (
           <div style={{ 
-            marginBottom: '30px',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
             padding: '20px',
             background: 'rgba(255, 255, 255, 0.9)',
-            borderRadius: '12px',
-            boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
+            zIndex: 1000,
             textAlign: 'center'
           }}>
             <div style={{
-              width: '40px',
-              height: '40px',
+              width: isMobile ? '50px' : '60px',
+              height: isMobile ? '50px' : '60px',
               border: '4px solid #f3f3f3',
               borderTop: '4px solid #667eea',
               borderRadius: '50%',
               animation: 'spin 1s linear infinite',
-              margin: '0 auto 15px'
+              marginBottom: '20px'
             }}></div>
-            <h4 style={{ margin: '0 0 10px 0', color: '#333' }}>Initializing AI Assistant...</h4>
-            <p style={{ margin: 0, color: '#666', fontSize: '14px' }}>Please wait while we connect to the AI service</p>
+            <h4 style={{ 
+              margin: 0, 
+              color: '#333',
+              fontSize: isMobile ? '18px' : '22px',
+              fontWeight: '600',
+              marginBottom: '10px'
+            }}>Initializing AI Assistant...</h4>
+            <p style={{ 
+              margin: 0, 
+              color: '#666', 
+              fontSize: isMobile ? '14px' : '16px'
+            }}>Please wait while we connect to the AI service</p>
           </div>
         )}
 
         {/* Error State */}
         {scriptError && (
           <div style={{ 
-            marginBottom: '30px',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
             padding: '20px',
             background: 'rgba(255, 255, 255, 0.9)',
-            borderRadius: '12px',
-            boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
+            zIndex: 1000,
             textAlign: 'center'
           }}>
-            <div style={{ fontSize: '48px', marginBottom: '15px' }}>⚠️</div>
-            <h4 style={{ margin: '0 0 10px 0', color: '#dc3545' }}>AI Service Unavailable</h4>
-            <p style={{ margin: '0 0 20px 0', color: '#666', fontSize: '14px' }}>
+            <div style={{ 
+              fontSize: isMobile ? '48px' : '64px', 
+              marginBottom: '20px' 
+            }}>⚠️</div>
+            <h4 style={{ 
+              margin: '0 0 10px 0', 
+              color: '#dc3545',
+              fontSize: isMobile ? '20px' : '24px',
+              fontWeight: '600'
+            }}>AI Service Unavailable</h4>
+            <p style={{ 
+              margin: '0 0 20px 0', 
+              color: '#666', 
+              fontSize: isMobile ? '14px' : '16px',
+              maxWidth: '400px'
+            }}>
               Unable to connect to the AI service. You can still use our backup chat system.
             </p>
             <button
               onClick={() => setShowSimpleChat(true)}
               style={{
-                padding: '12px 24px',
+                padding: isMobile ? '10px 20px' : '12px 24px',
                 background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                 color: 'white',
                 border: 'none',
                 borderRadius: '8px',
                 cursor: 'pointer',
                 fontWeight: '600',
-                fontSize: '14px',
+                fontSize: isMobile ? '14px' : '16px',
                 boxShadow: '0 2px 10px rgba(102, 126, 234, 0.3)'
               }}
             >
@@ -348,19 +381,25 @@ const Chat = () => {
         {/* Chat Interface */}
         <div style={{ 
           background: 'rgba(255, 255, 255, 0.95)',
-          borderRadius: '16px',
           overflow: 'hidden',
+          borderRadius: isMobile ? '12px' : '16px',
           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
           backdropFilter: 'blur(10px)',
-          border: '1px solid rgba(255, 255, 255, 0.2)'
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          position: 'relative'
         }}>
           {showSimpleChat ? (
             <SimpleChat />
           ) : scriptLoaded ? (
-            <MyChat />
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+              <MyChat />
+            </div>
           ) : (
             <div style={{ 
-              height: '600px', 
+              height: '100%',
               display: 'flex', 
               alignItems: 'center', 
               justifyContent: 'center',
