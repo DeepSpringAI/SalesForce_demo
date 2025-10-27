@@ -94,27 +94,12 @@ export function MyChat() {
       colorScheme: 'light',
     },
     startScreen: {
-      greeting: 'Hello! How can I help you today?',
+      greeting: 'Hi, As an assistant for Salesforce what can I do?',
       prompts: [
         {
-          label: 'What you can do?',
-          prompt: 'What you can do?',
-          icon: 'circle-question'
-        },
-        {
-          label: 'Salesforce Data Summary',
-          prompt: 'give me a summary of data in Salesforce',
-          icon: 'star-filled'
-        },
-        {
-          label: 'Doctors in Jeddah',
-          prompt: 'give me 5 doctors in jeddah',
+          label: 'I have a new drug to plan',
+          prompt: 'I have a new drug to plan',
           icon: 'lightbulb'
-        },
-        {
-          label: 'Create Doctor Contact',
-          prompt: `create a doctor contact name Ahmad lastname ${generateRandomLastname()}, ahmad@gmail.com, 092224222`,
-          icon: 'circle-question'
         }
       ],
     },

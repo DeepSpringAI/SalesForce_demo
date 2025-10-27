@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from openai import OpenAI
@@ -100,13 +100,40 @@ def create_simple_session(request: SessionRequest = SessionRequest(), http_reque
         print(f"❌ Error parsing OpenAI response: {e}")
         return {"error": f"Failed to parse OpenAI response: {str(e)}", "raw_response": response.text}
 
+@app.post("/api/transcribe")
+async def transcribe_audio(file: UploadFile = File(...)):
+    """Transcribe audio file using OpenAI Whisper API"""
+    try:
+        # Read the audio file
+        audio_data = await file.read()
+        
+        # Create a temporary file-like object for OpenAI
+        from io import BytesIO
+        audio_file = BytesIO(audio_data)
+        audio_file.name = file.filename
+        
+        # Transcribe using OpenAI
+        transcript = openai_client.audio.transcriptions.create(
+            model="whisper-1",
+            file=audio_file
+        )
+        
+        return {
+            "text": transcript.text
+        }
+    except Exception as e:
+        print(f"❌ Transcription error: {e}")
+        return {
+            "error": str(e)
+        }, 500
+
 @app.get("/")
 def health_check():
     """Health check endpoint"""
     return {
         "status": "running",
         "message": "ChatKit Session Server",
-        "endpoints": ["/api/chatkit/session"]
+        "endpoints": ["/api/chatkit/session", "/api/transcribe"]
     }
 
 if __name__ == "__main__":

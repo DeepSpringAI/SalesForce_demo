@@ -103,17 +103,28 @@ const VoiceRecorder = ({ onTranscriptionComplete }) => {
       formData.append('file', audioFile);
       formData.append('model', 'whisper-1');
       
-      // Make API call to OpenAI
-      const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+      // Determine API endpoint - use same logic as Chat.js
+      let apiEndpoint;
+      if (process.env.REACT_APP_API_URL) {
+        apiEndpoint = process.env.REACT_APP_API_URL;
+      } else if (process.env.NODE_ENV === 'production') {
+        // In production (built app), use relative path since we're served from the same server
+        apiEndpoint = '';
+      } else {
+        // In development, use localhost:8000
+        apiEndpoint = 'http://localhost:8000';
+      }
+      console.log('🔗 VoiceRecorder API endpoint:', apiEndpoint || 'relative');
+      
+      // Make API call to backend server instead of directly to OpenAI
+      const response = await fetch(`${apiEndpoint}/api/transcribe`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${process.env.REACT_APP_OPENAI_API_KEY || 'YOUR_API_KEY'}`,
-        },
         body: formData,
       });
 
       if (!response.ok) {
-        throw new Error(`Transcription failed: ${response.statusText}`);
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(`Transcription failed: ${errorData.error || response.statusText}`);
       }
 
       const data = await response.json();
@@ -131,7 +142,7 @@ const VoiceRecorder = ({ onTranscriptionComplete }) => {
       }, 500);
     } catch (error) {
       console.error('Error transcribing audio:', error);
-      alert('Failed to transcribe audio. Please check your API key.');
+      alert(`Failed to transcribe audio: ${error.message}`);
     } finally {
       setIsTranscribing(false);
     }
