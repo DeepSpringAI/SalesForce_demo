@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from openai import OpenAI
 import os
@@ -11,7 +12,7 @@ import random
 import string
 load_dotenv()
 
-app = FastAPI()
+app = FastAPI(title="ChatKit Session Server")
 
 # Add CORS middleware - allow all origins for ngrok compatibility
 app.add_middleware(
@@ -21,6 +22,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+print("🚀 Starting FastAPI server...")
+print(f"📋 Available endpoints:")
+print(f"   - POST /api/chatkit/session")
+print(f"   - POST /api/transcribe")
+print(f"   - GET  /")
 
 openai_client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
@@ -104,28 +111,35 @@ def create_simple_session(request: SessionRequest = SessionRequest(), http_reque
 async def transcribe_audio(file: UploadFile = File(...)):
     """Transcribe audio file using OpenAI Whisper API"""
     try:
+        print(f"📝 Received transcription request for file: {file.filename}")
+        
         # Read the audio file
         audio_data = await file.read()
+        print(f"📊 File size: {len(audio_data)} bytes")
         
         # Create a temporary file-like object for OpenAI
         from io import BytesIO
         audio_file = BytesIO(audio_data)
         audio_file.name = file.filename
         
+        print("🔄 Calling OpenAI Whisper API...")
         # Transcribe using OpenAI
         transcript = openai_client.audio.transcriptions.create(
             model="whisper-1",
             file=audio_file
         )
         
+        print(f"✅ Transcription successful: {transcript.text}")
         return {
             "text": transcript.text
         }
     except Exception as e:
         print(f"❌ Transcription error: {e}")
-        return {
-            "error": str(e)
-        }, 500
+        from fastapi.responses import JSONResponse
+        return JSONResponse(
+            status_code=500,
+            content={"error": str(e)}
+        )
 
 @app.get("/")
 def health_check():

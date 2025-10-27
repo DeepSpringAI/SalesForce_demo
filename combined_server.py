@@ -1,6 +1,6 @@
 import os
-from fastapi import FastAPI, Request
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, Request, UploadFile, File
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -33,6 +33,51 @@ async def create_session(request: Request):
     result = server.create_simple_session(server.SessionRequest(), request)
     print(f"✅ Combined server returning: {result}")
     return result
+
+@app.post("/api/transcribe")
+async def transcribe_audio_route(file: UploadFile = File(...)):
+    """Transcribe audio file using OpenAI Whisper API"""
+    print(f"🎤 Combined server received transcription request for file: {file.filename}")
+    try:
+        # Read the audio data
+        audio_data = await file.read()
+        print(f"📊 File size: {len(audio_data)} bytes")
+        
+        # Use the OpenAI client directly here
+        from openai import OpenAI
+        import os
+        from io import BytesIO
+        
+        OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+        if not OPENAI_API_KEY:
+            return JSONResponse(
+                status_code=500,
+                content={"error": "OpenAI API key not configured"}
+            )
+        
+        client = OpenAI(api_key=OPENAI_API_KEY)
+        
+        # Create a file-like object from the bytes
+        audio_file = BytesIO(audio_data)
+        audio_file.name = file.filename
+        
+        print("🔄 Calling OpenAI Whisper API...")
+        transcript = client.audio.transcriptions.create(
+            model="whisper-1",
+            file=audio_file
+        )
+        
+        print(f"✅ Transcription successful: {transcript.text}")
+        return {"text": transcript.text}
+        
+    except Exception as e:
+        print(f"❌ Transcription error in combined server: {e}")
+        import traceback
+        traceback.print_exc()
+        return JSONResponse(
+            status_code=500,
+            content={"error": str(e)}
+        )
 
 @app.get("/api/health")
 async def health():
