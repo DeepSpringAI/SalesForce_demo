@@ -239,7 +239,21 @@ const VoiceRecorder = ({ onTranscriptionComplete }) => {
             color: isRecording ? '#ffffff' : (isMobile ? '#ffffff' : 'inherit')
           }}
         >
-          {isMobile ? (
+          {isTranscribing ? (
+            // Show loading spinner when transcribing
+            <div style={{
+              width: isMobile ? '20px' : '24px',
+              height: isMobile ? '20px' : '24px',
+              border: isMobile 
+                ? '2px solid rgba(255, 255, 255, 0.3)' 
+                : '3px solid rgba(0, 0, 0, 0.3)',
+              borderTop: isMobile 
+                ? '2px solid #ffffff' 
+                : '3px solid #000000',
+              borderRadius: '50%',
+              animation: 'spin 0.8s linear infinite'
+            }}></div>
+          ) : isMobile ? (
             // Mobile: Full width button with text
             isRecording ? (
               <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -308,48 +322,6 @@ const VoiceRecorder = ({ onTranscriptionComplete }) => {
         )}
       </div>
 
-      {/* Transcribing Message */}
-      {isTranscribing && (
-        <div style={{
-          ...(isMobile ? {
-            position: 'absolute',
-            bottom: '80px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            maxWidth: 'calc(100% - 40px)'
-          } : {
-            position: 'fixed',
-            bottom: '160px',
-            right: '30px',
-          }),
-          background: 'white',
-          borderRadius: '16px',
-          padding: isMobile ? '15px 20px' : '20px 30px',
-          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
-          zIndex: 999,
-          display: 'flex',
-          alignItems: 'center',
-          gap: '15px'
-        }}>
-          <div style={{
-            width: isMobile ? '30px' : '40px',
-            height: isMobile ? '30px' : '40px',
-            border: '3px solid #667eea',
-            borderTop: '3px solid transparent',
-            borderRadius: '50%',
-            animation: 'spin 0.8s linear infinite',
-            flexShrink: 0
-          }}></div>
-          <div>
-            <p style={{ margin: 0, fontSize: isMobile ? '14px' : '16px', fontWeight: '600', color: '#333' }}>
-              Transcribing...
-            </p>
-            <p style={{ margin: '5px 0 0 0', fontSize: isMobile ? '12px' : '13px', color: '#666' }}>
-              Processing your voice message
-            </p>
-          </div>
-        </div>
-      )}
     </>
   );
 };
