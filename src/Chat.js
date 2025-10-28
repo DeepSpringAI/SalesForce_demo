@@ -18,6 +18,19 @@ const generateRandomLastname = () => {
 export function MyChat() {
   // Store chatkit reference to pass to VoiceRecorder
   const chatkitRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
+  
+  // Check for mobile vs desktop
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
   
   const chatkit = useChatKit({
     api: {

@@ -196,11 +196,13 @@ const VoiceRecorder = ({ onTranscriptionComplete }) => {
     <>
       {/* Floating White Button */}
       <div style={{
-        position: 'fixed',
         ...(isMobile ? {
-          top: '30px',
-          left: '20px',
+          position: 'relative',
+          width: '100%',
+          padding: '10px',
+          background: '#ffffff'
         } : {
+          position: 'fixed',
           bottom: '80px',
           right: '30px',
         }),
@@ -209,26 +211,70 @@ const VoiceRecorder = ({ onTranscriptionComplete }) => {
         <button
           onClick={toggleRecording}
           style={{
-            width: isMobile ? '56px' : '64px',
-            height: isMobile ? '56px' : '64px',
-            borderRadius: '50%',
+            ...(isMobile ? {
+              width: '100%',
+              height: '48px',
+              borderRadius: '12px'
+            } : {
+              width: '64px',
+              height: '64px',
+              borderRadius: '50%'
+            }),
             background: isRecording 
-              ? 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)' 
-              : 'white',
-            border: isRecording ? 'none' : '3px solid #667eea',
+              ? (isMobile ? '#dc3545' : 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)')
+              : (isMobile ? '#000000' : 'white'),
+            border: isRecording ? 'none' : (isMobile ? 'none' : '3px solid #000000'),
             boxShadow: isRecording 
-              ? '0 4px 20px rgba(220, 53, 69, 0.5), 0 0 30px rgba(220, 53, 69, 0.3)' 
-              : '0 4px 20px rgba(102, 126, 234, 0.25), 0 2px 8px rgba(0, 0, 0, 0.1)',
+              ? (isMobile ? '0 4px 20px rgba(220, 53, 69, 0.5)' : '0 4px 20px rgba(220, 53, 69, 0.5), 0 0 30px rgba(220, 53, 69, 0.3)')
+              : (isMobile ? '0 4px 20px rgba(0, 0, 0, 0.25)' : '0 4px 20px rgba(0, 0, 0, 0.25), 0 2px 8px rgba(0, 0, 0, 0.1)'),
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontSize: isMobile ? '22px' : '24px',
+            fontSize: isMobile ? '16px' : '24px',
+            fontWeight: isMobile ? '600' : 'normal',
+            fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
             transition: 'all 0.3s ease',
-            transform: isRecording ? 'scale(1.05)' : 'scale(1)'
+            transform: isRecording ? 'scale(1.02)' : 'scale(1)',
+            color: isRecording ? '#ffffff' : (isMobile ? '#ffffff' : 'inherit')
           }}
         >
-          {isRecording ? '⏹️' : '🎤︎︎'}
+          {isMobile ? (
+            // Mobile: Full width button with text
+            isRecording ? (
+              <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ 
+                  width: '12px', 
+                  height: '12px', 
+                  background: '#ffffff', 
+                  borderRadius: '2px' 
+                }}></span>
+                Stop Recording
+              </span>
+            ) : (
+              <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginBottom: '2px' }}>
+                  <path d="M12 1C11.2044 1 10.4413 1.31607 9.87868 1.87868C9.31607 2.44129 9 3.20435 9 4V12C9 12.7956 9.31607 13.5587 9.87868 14.1213C10.4413 14.6839 11.2044 15 12 15C12.7956 15 13.5587 14.6839 14.1213 14.1213C14.6839 13.5587 15 12.7956 15 12V4C15 3.20435 14.6839 2.44129 14.1213 1.87868C13.5587 1.31607 12.7956 1 12 1Z" fill="currentColor" stroke="currentColor" strokeWidth="1.5"/>
+                  <path d="M19 10V12C19 13.8565 18.2625 15.637 16.9497 16.9497C15.637 18.2625 13.8565 19 12 19C10.1435 19 8.36301 18.2625 7.05025 16.9497C5.7375 15.637 5 13.8565 5 12V10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M12 19V23M12 23H9M12 23H15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                Record Voice
+              </span>
+            )
+          ) : (
+            // Desktop: Circular button with icon only
+            isRecording ? (
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 5H19V19H5V5Z" fill="currentColor"/>
+              </svg>
+            ) : (
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 1C11.2044 1 10.4413 1.31607 9.87868 1.87868C9.31607 2.44129 9 3.20435 9 4V12C9 12.7956 9.31607 13.5587 9.87868 14.1213C10.4413 14.6839 11.2044 15 12 15C12.7956 15 13.5587 14.6839 14.1213 14.1213C14.6839 13.5587 15 12.7956 15 12V4C15 3.20435 14.6839 2.44129 14.1213 1.87868C13.5587 1.31607 12.7956 1 12 1Z" fill="currentColor" stroke="currentColor" strokeWidth="1.5"/>
+                <path d="M19 10V12C19 13.8565 18.2625 15.637 16.9497 16.9497C15.637 18.2625 13.8565 19 12 19C10.1435 19 8.36301 18.2625 7.05025 16.9497C5.7375 15.637 5 13.8565 5 12V10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M12 19V23M12 23H9M12 23H15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            )
+          )}
         </button>
         
         {/* Timer display when recording */}
@@ -236,8 +282,9 @@ const VoiceRecorder = ({ onTranscriptionComplete }) => {
           <div style={{
             position: 'absolute',
             ...(isMobile ? {
-              top: '70px',
-              left: '0',
+              bottom: '85px',
+              left: '50%',
+              transform: 'translateX(-50%)'
             } : {
               top: '-50px',
               right: '0',
@@ -264,17 +311,20 @@ const VoiceRecorder = ({ onTranscriptionComplete }) => {
       {/* Transcribing Message */}
       {isTranscribing && (
         <div style={{
-          position: 'fixed',
           ...(isMobile ? {
-            top: '110px',
-            left: '20px',
+            position: 'absolute',
+            bottom: '80px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            maxWidth: 'calc(100% - 40px)'
           } : {
+            position: 'fixed',
             bottom: '160px',
             right: '30px',
           }),
           background: 'white',
           borderRadius: '16px',
-          padding: '20px 30px',
+          padding: isMobile ? '15px 20px' : '20px 30px',
           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
           zIndex: 999,
           display: 'flex',
@@ -282,18 +332,19 @@ const VoiceRecorder = ({ onTranscriptionComplete }) => {
           gap: '15px'
         }}>
           <div style={{
-            width: '40px',
-            height: '40px',
+            width: isMobile ? '30px' : '40px',
+            height: isMobile ? '30px' : '40px',
             border: '3px solid #667eea',
             borderTop: '3px solid transparent',
             borderRadius: '50%',
-            animation: 'spin 0.8s linear infinite'
+            animation: 'spin 0.8s linear infinite',
+            flexShrink: 0
           }}></div>
           <div>
-            <p style={{ margin: 0, fontSize: '16px', fontWeight: '600', color: '#333' }}>
+            <p style={{ margin: 0, fontSize: isMobile ? '14px' : '16px', fontWeight: '600', color: '#333' }}>
               Transcribing...
             </p>
-            <p style={{ margin: '5px 0 0 0', fontSize: '13px', color: '#666' }}>
+            <p style={{ margin: '5px 0 0 0', fontSize: isMobile ? '12px' : '13px', color: '#666' }}>
               Processing your voice message
             </p>
           </div>
